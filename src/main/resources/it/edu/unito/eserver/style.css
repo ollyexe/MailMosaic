@@ -1,0 +1,24 @@
+
+.server_log_view,
+.log,
+.log:cell-selection,
+.log:selected,
+.log:focused {
+    -fx-background-color: black;
+}
+
+.list-cell {
+    -fx-text-fill: black;
+}
+
+.info {
+    -fx-text-fill: white;
+}
+
+.sys {
+    -fx-text-fill: green;
+}
+
+.warning {
+    -fx-text-fill: red;
+}
