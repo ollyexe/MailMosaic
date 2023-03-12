@@ -4,6 +4,7 @@ import it.edu.unito.eserver.Log.Log;
 import it.edu.unito.eserver.Log.LogManager;
 import it.edu.unito.eserver.Log.LogType;
 import it.edu.unito.eserver.Test;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,12 +26,12 @@ public class Ops  implements Runnable{
     @Override
     public void run() {
         try {
-            System.out.println("Ops");
+            //System.out.println("Ops");
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
             Integer a = (Integer) inputStream.readObject();
-            System.out.println("Received Value : "+ a);
-            logManager.printNewLog(new Log("Content received"+a, LogType.WARNING));
+           // System.out.println("Received Value : "+ a);
+            Platform.runLater(()->logManager.printNewLog(new Log("Content received  "+a, LogType.WARNING)));
             outputStream.flush();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
