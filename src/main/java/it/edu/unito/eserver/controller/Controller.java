@@ -1,8 +1,8 @@
 package it.edu.unito.eserver.controller;
 
-import it.edu.unito.eserver.Log.Log;
-import it.edu.unito.eserver.Log.LogManager;
-import it.edu.unito.eserver.Log.LogType;
+import it.edu.unito.eserver.model.Log.Log;
+import it.edu.unito.eserver.model.Log.LogManager;
+import it.edu.unito.eserver.model.Log.LogType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;

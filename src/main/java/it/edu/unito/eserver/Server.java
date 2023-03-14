@@ -1,9 +1,9 @@
 package it.edu.unito.eserver;
 
-import it.edu.unito.eserver.Log.Log;
-import it.edu.unito.eserver.Log.LogManager;
-import it.edu.unito.eserver.Log.LogType;
-import it.edu.unito.oModels.Ops;
+import it.edu.unito.eserver.model.Log.Log;
+import it.edu.unito.eserver.model.Log.LogManager;
+import it.edu.unito.eserver.model.Log.LogType;
+import it.edu.unito.eserver.model.Operations.Ops;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class Server extends Thread{
     private ServerSocket serverSocket;
     private final ExecutorService serverThreads;
     public Server(){
-        logManager=Test.u.getLogManager();
+        logManager= Run.u.getLogManager();
         logManager.printNewLog(new Log("Loading initial config app.properties...", LogType.SYS));
         proprieties = loadProp();
         serverThreads  = Executors.newFixedThreadPool(Integer.parseInt(proprieties.getProperty("server.threads_count")));

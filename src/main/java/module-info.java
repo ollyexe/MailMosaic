@@ -12,9 +12,9 @@ module com.example.eserver {
     opens it.edu.unito.eserver to javafx.fxml;
     exports it.edu.unito.eserver.controller;
     opens it.edu.unito.eserver.controller to javafx.fxml;
-    exports it.edu.unito.eserver.Log;
-    opens it.edu.unito.eserver.Log to javafx.fxml;
-    exports it.edu.unito.eserver.DAO;
-    opens it.edu.unito.eserver.DAO to javafx.fxml;
+    exports it.edu.unito.eserver.model.Log;
+    opens it.edu.unito.eserver.model.Log to javafx.fxml;
+    exports it.edu.unito.eserver.model.DAO;
+    opens it.edu.unito.eserver.model.DAO to javafx.fxml;
 
 }

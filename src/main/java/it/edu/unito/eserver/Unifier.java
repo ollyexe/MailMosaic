@@ -1,7 +1,7 @@
 package it.edu.unito.eserver;
 
-import it.edu.unito.eserver.DAO.Dao;
-import it.edu.unito.eserver.Log.LogManager;
+import it.edu.unito.eserver.model.DAO.Dao;
+import it.edu.unito.eserver.model.Log.LogManager;
 
 public class Unifier {
     private final Dao dao;
