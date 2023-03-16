@@ -8,15 +8,25 @@ import java.util.*;
 public class Dao {
     private final String memory = new File("").getAbsolutePath() +"/src/main/java/it/edu/unito/eserver/memory/";
 
-    public Dao() {
+    private static  Dao instance = new Dao();
+    private Dao() {
+    }
+
+    public static Dao getInstance(){
+        if (instance == null) {
+            instance = new Dao() ;
+            System.out.println("new instance");
+        }
+        System.out.println("already existing instance");
+        return instance;
     }
     private  String findEmailPath(Mail mail, String user){
-        int id = mail.getId();
+        int id = mail.getId();//hash code chages but doenst change the id --> first hach code when just created
         System.out.println(id);
         File f = new File(memory + "/" + user +  "/" +  id + ".txt");
         return f.getAbsolutePath();
     }
-    public   boolean save(Mail mail, String user){
+    public  boolean save(Mail mail, String user){
         boolean flag;
         FileOutputStream fout;
         try {
@@ -36,15 +46,15 @@ public class Dao {
         return flag;
     }
     public  List<Mail> fetch(String user){
-
-        File[] emailsFiles = new File(memory + "/" +
-                user +  "/").listFiles();
         FileInputStream fin;
         ObjectInputStream obj;
         List<Mail> emails = new ArrayList<>();
+        File[] emailsFiles = new File(memory + "/" +
+                user +  "/").listFiles();
+
 
         try {
-            for (File file : Objects.requireNonNull(emailsFiles)) {
+            for (File file : emailsFiles) {
                 fin = new FileInputStream(file);
                 obj = new ObjectInputStream(fin);
                 emails.add((Mail) obj.readObject());
@@ -53,16 +63,14 @@ public class Dao {
             }
 
 
-        } catch (ClassNotFoundException | IOException |
-                 NullPointerException e) {
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
-            emails = null;
         }
 
         return emails;
     }
 
-    public void read(Mail mail, String user){
+    public boolean read(Mail mail, String user){
         File emailsFiles = new File(findEmailPath(mail, user));
         FileInputStream fin;
         ObjectInputStream obj;
@@ -74,17 +82,22 @@ public class Dao {
                 obj = new ObjectInputStream(fin);
                 actEmail=(Mail) obj.readObject();
 
-                actEmail.setRead(true);
-                save(actEmail,user);//hash code chages but doenst change the id --> first hach code when just created
-                obj.close();
-                fin.close();
+                if (mail.getReceivers().contains(user)){
+                    actEmail.setRead(true);
+                    return save(actEmail,user);
+                }
+                else
+                    throw new Exception("Illegal reading try");
 
 
 
-        } catch (ClassNotFoundException | IOException |
-                 NullPointerException e) {
+
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public void delete(Mail mail, String user){
@@ -103,7 +116,6 @@ public class Dao {
         String[] dirs = new File(memory).list(
                 (current, name) -> new File(current, name)
                         .isDirectory());
-
         return dirs != null && dirs.length != 0 &&
                 Arrays.stream(dirs).toList().contains(receiver);
     }

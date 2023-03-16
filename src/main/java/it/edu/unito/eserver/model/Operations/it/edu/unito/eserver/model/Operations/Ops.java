@@ -1,7 +1,10 @@
 package it.edu.unito.eserver.model.Operations;
 
 import it.edu.unito.eserver.Run;
+import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.LogManager;
+import it.edu.unito.eserver.model.Operations.Factory.Fetch;
+import it.edu.unito.eserver.model.Operations.Factory.OperationFactory;
 import it.edu.unito.oModels.Request;
 import it.edu.unito.oModels.Response;
 import javafx.application.Platform;
@@ -14,6 +17,7 @@ import java.net.Socket;
 public class Ops  implements Runnable{
     Socket socket;
     LogManager logManager;
+    LockSystem lockSys;
 
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
@@ -21,23 +25,27 @@ public class Ops  implements Runnable{
     public Ops(Socket socket) {
         this.socket = socket;
         logManager = Run.u.getLogManager();
+        lockSys = Run.u.getLockSystem();
+
     }
 
     @Override
     public void run() {
         try {
-            //System.out.println("Ops");
+
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
             Request rq = (Request) inputStream.readObject();
-            Response response = new Send(rq).handle();
+            lockSys.addLockEntry(rq.getSender());
+            Response response = new OperationFactory(rq).produce().handle();//factory da implementare
+            lockSys.removeLockEntry(rq.getSender());
            // System.out.println("Received Value : "+ a);
             outputStream.flush();
             outputStream.writeObject(response);
             Platform.runLater(()->logManager.printNewLog(new Log("Content received  "+rq.getOpName(), LogType.WARNING)));
             outputStream.flush();
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }

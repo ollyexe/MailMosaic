@@ -1,8 +1,9 @@
 package it.edu.unito.oModels;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Response {
+public class Response implements Serializable {
     ResponseName responseName;
     List<Mail> content;
 
@@ -22,4 +23,6 @@ public class Response {
     public List<Mail> getContent() {
         return content;
     }
+
+
 }

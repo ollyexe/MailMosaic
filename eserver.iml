@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java/it/edu/unito/eserver/model/DAO" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java/it/edu/unito/eserver/model/Lock" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java/it/edu/unito/eserver/model/Log" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java/it/edu/unito/eserver/model/Operations" isTestSource="false" />
     </content>

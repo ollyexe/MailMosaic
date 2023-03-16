@@ -2,13 +2,14 @@ package it.edu.unito.eserver;
 
 
 
-import it.edu.unito.oModels.Mail;
+import it.edu.unito.oModels.*;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Client {
     private static ObjectOutputStream outputStream;
@@ -21,12 +22,38 @@ public class Client {
         // create the input and output streams
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         inputStream  = new ObjectInputStream(socket.getInputStream());
-
+        User u = new User("olly@gmail.com");
         try {
 
-            outputStream.writeObject(new Mail("olly@gmail.com", List.of("gionni@gmail.com"),"lavoro","gg" ));
+            //per put e delete serve invocare il costruttore mail con data , perche dal client si ha l entita con il timestamp
+
+
+
+            //PUT
+//            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,new Mail(u.getEmail(), List.of("gionni@gmail.com"),"lavoro","gg" )));
+//            outputStream.flush();
+//            Response r = (Response) inputStream.readObject();
+//            System.out.println(r.getResponseName());
+
+
+            //POST
+//            outputStream.writeObject(new Request(u.getEmail(),OperationName.POST,new Mail(u.getEmail(), List.of("gionni@gmail.com"),"lavoro","gg" )));
+//            outputStream.flush();
+//            Response r = (Response) inputStream.readObject();
+//            System.out.println(r.getResponseName());
+
+
+            //GET
+            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.GET));
             outputStream.flush();
-        } catch (IOException e) {
+            Response r = (Response) inputStream.readObject();
+            System.out.println(r.getContent());
+
+//            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,r.getContent().get(0)));
+//            outputStream.flush();
+//            r = (Response) inputStream.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 

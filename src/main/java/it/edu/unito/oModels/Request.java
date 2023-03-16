@@ -31,10 +31,8 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        return "Request{" +
-                "sender='" + sender + '\'' +
-                ", opName=" + opName +
-                ", content=" + content +
-                '}';
+        return "SEND " +
+                "from='" + sender + '\'' +
+                ", to=" + content.getReceivers() ;
     }
 }

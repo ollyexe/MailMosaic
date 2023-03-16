@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 public class Mail implements Serializable,Comparable<Mail>{
     private int id;
@@ -26,6 +27,7 @@ public class Mail implements Serializable,Comparable<Mail>{
         this.date=LocalDateTime.now();
         this.read=false;
     }
+
 
 
     public int getId() {
@@ -64,6 +66,7 @@ public class Mail implements Serializable,Comparable<Mail>{
     public int compareTo(Mail email) {//per fare il display in ordine crescente
         return email.getDate().compareTo(this.date);
     }
+
 
 
     @Override
