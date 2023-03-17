@@ -49,6 +49,12 @@ public class Client {
             Response r = (Response) inputStream.readObject();
             System.out.println(r.getContent());
 
+            //Put
+//            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,new Mail(u.getEmail(), List.of("gionni@gmail.com"),"lavoro","gg" )));
+//            outputStream.flush();
+//            Response r = (Response) inputStream.readObject();
+//            System.out.println(r.getResponseName());
+
 //            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,r.getContent().get(0)));
 //            outputStream.flush();
 //            r = (Response) inputStream.readObject();

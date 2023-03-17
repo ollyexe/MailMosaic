@@ -56,7 +56,6 @@ public class Send implements Operation{
 
             }
             else {
-                email.setRead(true);
                 boolean allSends = true;
                 //scrive le mail nelle caselle dei destinatari
                 for (String receiver : email.getReceivers()) {
