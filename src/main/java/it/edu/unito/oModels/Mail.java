@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Mail implements Serializable,Comparable<Mail>{
-    private int id;
+    private final int id;
     private final String sender;
     private final List<String> receivers;
     private final String subject;
@@ -19,12 +19,21 @@ public class Mail implements Serializable,Comparable<Mail>{
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     public Mail(String sender, List<String> receivers, String subject, String text) {
-        this.id=this.hashCode();
+        this.id=this.idGen(sender, receivers, subject, text, LocalDateTime.now());
         this.sender = sender;
         this.receivers = receivers;
         this.subject = subject;
         this.text = text;
         this.date=LocalDateTime.now();
+        this.read=false;
+    }
+    public Mail(String sender, List<String> receivers, String subject, String text,LocalDateTime date) {
+        this.id=this.idGen(sender, receivers, subject, text, date);
+        this.sender = sender;
+        this.receivers = receivers;
+        this.subject = subject;
+        this.text = text;
+        this.date=date;
         this.read=false;
     }
 
@@ -68,6 +77,17 @@ public class Mail implements Serializable,Comparable<Mail>{
     }
 
 
+    public int idGen(String sender,List<String> receivers,String subject,String text,LocalDateTime date) {
+        return Objects.hash(sender, receivers, subject, text, date);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mail email = (Mail) o;
+        return getId() == email.getId();
+    }
 
     @Override
     public String toString() {
@@ -81,6 +101,9 @@ public class Mail implements Serializable,Comparable<Mail>{
                 ", read=" + read +
                 '}';
     }
+
+
+
 
 
 }

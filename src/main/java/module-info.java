@@ -16,5 +16,7 @@ module com.example.eserver {
     opens it.edu.unito.eserver.model.Log to javafx.fxml;
     exports it.edu.unito.eserver.model.DAO;
     opens it.edu.unito.eserver.model.DAO to javafx.fxml;
+    exports it.edu.unito.oModels;
+    opens it.edu.unito.oModels to javafx.fxml;
 
 }

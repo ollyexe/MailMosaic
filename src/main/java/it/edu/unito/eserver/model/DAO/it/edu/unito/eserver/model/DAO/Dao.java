@@ -72,7 +72,7 @@ public class Dao {
 
     public boolean read(Mail mail, String user){
 
-        File emailsFiles = new File(new File(memory + "/" + user +  "/" +  "325333723" + ".txt").getAbsolutePath());
+        File emailsFiles = new File(findEmailPath(mail, user));
         FileInputStream fin;
         ObjectInputStream obj;
         Mail actEmail;

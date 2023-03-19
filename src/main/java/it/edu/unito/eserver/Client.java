@@ -1,67 +1,63 @@
 package it.edu.unito.eserver;
 
 
+import it.edu.unito.oModels.Mail;
+import it.edu.unito.oModels.OperationName;
+import it.edu.unito.oModels.Request;
+import it.edu.unito.oModels.Response;
 
-import it.edu.unito.oModels.*;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Client {
-    private static ObjectOutputStream outputStream;
-    private static ObjectInputStream inputStream;
+
     public static void main(String[] args) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        System.out.println(call(new Request("olly@gmail.com",OperationName.PUT,new Mail("gionni@gmail.com", List.of("olly@gmail.com"),"albergo","gg", LocalDateTime.parse("25/05/2023 12:12:12",formatter)))).getResponseName());
+
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+        System.out.println(Objects.requireNonNull(call(new Request("olly@gmail.com", OperationName.GET))).getContent().stream().filter(mail -> mail.getReceivers().contains("olly@gmail.com")).collect(Collectors.toList()));
+
+
+    }
+
+
+    public static Response call(Request request) {
+        ObjectOutputStream outputStream = null;
+        ObjectInputStream inputStream = null;
+        Socket socket=null;
         // create a new Socket object and connect to the server on port 1234
-        Socket socket = new Socket("127.0.0.1", 40000);
-        System.out.println("Connected to server: " + socket.getInetAddress()+":"+40000);
 
-        // create the input and output streams
-        outputStream = new ObjectOutputStream(socket.getOutputStream());
-        inputStream  = new ObjectInputStream(socket.getInputStream());
-        User u = new User("olly@gmail.com");
-        try {
+           try {
+               socket = new Socket("127.0.0.1", 40000);
+               outputStream = new ObjectOutputStream(socket.getOutputStream());
+               inputStream  = new ObjectInputStream(socket.getInputStream());
+               outputStream.writeObject(request);
+               outputStream.flush();
 
-            //per put e delete serve invocare il costruttore mail con data , perche dal client si ha l entita con il timestamp
+               return (Response) inputStream.readObject();
+           } catch (ClassNotFoundException | IOException e) {
+               throw new RuntimeException(e);
+           }finally {
+               try{
+                   assert inputStream != null;
+                   inputStream.close();
+                   outputStream.close();
+                   socket.close();
 
+               } catch (IOException ignored) {
+               }
 
-
-            //PUT
-//            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,new Mail(u.getEmail(), List.of("gionni@gmail.com"),"lavoro","gg" )));
-//            outputStream.flush();
-//            Response r = (Response) inputStream.readObject();
-//            System.out.println(r.getResponseName());
-
-
-            //POST
-//            outputStream.writeObject(new Request(u.getEmail(),OperationName.POST,new Mail(u.getEmail(), List.of("gionni@gmail.com"),"lavoro","gg" )));
-//            outputStream.flush();
-//            Response r = (Response) inputStream.readObject();
-//            System.out.println(r.getResponseName());
-
-
-            //GET
-            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.GET));
-            outputStream.flush();
-            Response r = (Response) inputStream.readObject();
-            System.out.println(r.getContent());
-
-            //Put
-//            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,new Mail(u.getEmail(), List.of("gionni@gmail.com"),"lavoro","gg" )));
-//            outputStream.flush();
-//            Response r = (Response) inputStream.readObject();
-//            System.out.println(r.getResponseName());
-
-//            outputStream.writeObject(new Request("gionni@gmail.com",OperationName.PUT,r.getContent().get(0)));
-//            outputStream.flush();
-//            r = (Response) inputStream.readObject();
-
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+           }
 
     }
 }
