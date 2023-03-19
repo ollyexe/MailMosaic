@@ -1,10 +1,6 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
-import it.edu.unito.eserver.model.Log.Log;
-import it.edu.unito.eserver.model.Log.LogManager;
-import it.edu.unito.eserver.model.Log.LogType;
-import it.edu.unito.oModels.Request;
-import javafx.application.Platform;
+import it.edu.unito.eclientlib.*;
 
 public class OperationFactory {
 
@@ -25,6 +21,10 @@ public class OperationFactory {
             case PUT -> {
 
                 return new Read(rq);
+            }
+            case DELETE -> {
+
+                return new Delete(rq);
             }
             default -> throw new IllegalArgumentException("Invalid product type: " + rq.getOpName());
 

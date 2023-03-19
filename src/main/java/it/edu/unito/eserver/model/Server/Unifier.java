@@ -1,10 +1,8 @@
-package it.edu.unito.eserver;
+package it.edu.unito.eserver.model.Server;
 
 import it.edu.unito.eserver.model.DAO.Dao;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.LogManager;
-
-import java.util.concurrent.locks.Lock;
 
 public class Unifier {
     private final Dao dao;

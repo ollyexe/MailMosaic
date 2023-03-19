@@ -1,17 +1,13 @@
 package it.edu.unito.eserver;
 
 
-import it.edu.unito.oModels.Mail;
-import it.edu.unito.oModels.OperationName;
-import it.edu.unito.oModels.Request;
-import it.edu.unito.oModels.Response;
+import it.edu.unito.eclientlib.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,13 +15,14 @@ import java.util.stream.Collectors;
 public class Client {
 
     public static void main(String[] args) throws IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-        System.out.println(call(new Request("olly@gmail.com",OperationName.PUT,new Mail("gionni@gmail.com", List.of("olly@gmail.com"),"albergo","gg", LocalDateTime.parse("25/05/2023 12:12:12",formatter)))).getResponseName());
+        System.out.println(call(new Request("olly@gmail.com",OperationName.POST,new Mail("olly@gmail.com", List.of("gionni@gmail.com"),"albergo","gg", LocalDateTime.parse("25/05/2023 12:12:12", Util.formatter)))).getResponseName());
 
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-        System.out.println(Objects.requireNonNull(call(new Request("olly@gmail.com", OperationName.GET))).getContent().stream().filter(mail -> mail.getReceivers().contains("olly@gmail.com")).collect(Collectors.toList()));
+        //System.out.println(Objects.requireNonNull(call(new Request("olly@gmail.com", OperationName.GET))).getContent().stream().filter(mail -> mail.getReceivers().contains("olly@gmail.com")).collect(Collectors.toList()));
+
+        //System.out.println(call(new Request("olly@gmail.com",OperationName.DELETE)));
 
 
     }

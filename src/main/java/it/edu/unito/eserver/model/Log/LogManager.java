@@ -1,10 +1,14 @@
 package it.edu.unito.eserver.model.Log;
 
+import it.edu.unito.eserver.ServerApp;
+import it.edu.unito.eclientlib.*;
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -31,9 +35,9 @@ public class LogManager {
     public static LogManager getInstance(){
         if (instance == null) {
             instance = new LogManager() ;
-            System.out.println("new instance");
+
         }
-        System.out.println("already existing instance");
+
         return instance;
     }
 
@@ -42,4 +46,25 @@ public class LogManager {
     }
 
 
+    public static void logResponse(ResponseName name, Request req) {
+        if (name.equals(ResponseName.SUCCESS)){
+            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+                    (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
+                            .append("[INFO] :")
+                            .append(req.toString())).toString(), LogType.INFO) ));
+
+        } else if (name.equals(ResponseName.ILLEGAL_PARAMS)) {
+            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+                    (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
+                            .append("[Warning] :")
+                            .append(ResponseName.ILLEGAL_PARAMS).append("||").append(req.toString())).toString(), LogType.WARNING) ));
+        } else {
+            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+                    (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
+                            .append("[Warning] :")
+                            .append("||").append(req.toString())).toString(), LogType.WARNING) ));
+        }
+
+
+    }
 }

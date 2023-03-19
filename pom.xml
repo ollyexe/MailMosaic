@@ -85,6 +85,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>it.edu.unito</groupId>
+            <artifactId>elib</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

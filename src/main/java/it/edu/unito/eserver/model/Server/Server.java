@@ -1,5 +1,6 @@
-package it.edu.unito.eserver;
+package it.edu.unito.eserver.model.Server;
 
+import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Log.Log;
 import it.edu.unito.eserver.model.Log.LogManager;
 import it.edu.unito.eserver.model.Log.LogType;
@@ -8,6 +9,7 @@ import it.edu.unito.eserver.model.Operations.Ops;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
@@ -16,14 +18,14 @@ import java.util.concurrent.Executors;
 
 public class Server extends Thread{
 
-    private final Properties proprieties;
+    public final Properties proprieties;
 
     private final LogManager logManager;
 
     private ServerSocket serverSocket;
     private final ExecutorService serverThreads;
     public Server(){
-        logManager= Run.u.getLogManager();
+        logManager= ServerApp.unifier.getLogManager();
         logManager.printNewLog(new Log("Loading initial config app.properties...", LogType.SYS));
         proprieties = loadProp();
         serverThreads  = Executors.newFixedThreadPool(Integer.parseInt(proprieties.getProperty("server.threads_count")));
@@ -31,10 +33,10 @@ public class Server extends Thread{
 
     @Override
     public void start(){
-        logManager.printNewLog(new Log("Start server at port: " + proprieties.getProperty("server.server_port"),LogType.SYS));
         Socket currentSocket = null;
         try {
             serverSocket = new ServerSocket(Integer.parseInt(proprieties.getProperty("server.server_port")));
+            logManager.printNewLog(new Log("Start server at : "+ InetAddress.getLocalHost().getHostAddress()+":" + proprieties.getProperty("server.server_port"),LogType.SYS));
 
             while (!Thread.interrupted()){
                 currentSocket = serverSocket.accept();
@@ -44,6 +46,7 @@ public class Server extends Thread{
         } catch (Exception ignored) {
 
         }
+
     }
 
 
@@ -51,7 +54,7 @@ public class Server extends Thread{
         InputStream input = null;
         Properties proprieties = new Properties();
         try {
-            input = new FileInputStream("C:\\Users\\olly\\IdeaProjects\\eclient\\eclient\\src\\main\\resources\\app.properties");
+            input = new FileInputStream("eserver/src/main/resources/app.properties");
 
             // load a properties file
             proprieties.load(input);

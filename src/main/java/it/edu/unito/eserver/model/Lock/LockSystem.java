@@ -19,9 +19,9 @@ public class LockSystem {
     public static LockSystem getInstance(){
         if (instance == null) {
             instance = new LockSystem() ;
-            System.out.println("new instance");
+
         }
-        System.out.println("already existing instance");
+
         return instance;
     }
 

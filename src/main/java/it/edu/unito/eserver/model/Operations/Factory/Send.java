@@ -1,18 +1,18 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
-import it.edu.unito.eserver.Run;
+import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.Log;
 import it.edu.unito.eserver.model.Log.LogManager;
 import it.edu.unito.eserver.model.Log.LogType;
-import it.edu.unito.oModels.Mail;
-import it.edu.unito.oModels.Request;
-import it.edu.unito.oModels.Response;
-import it.edu.unito.oModels.ResponseName;
+import it.edu.unito.eclientlib.*;
 import javafx.application.Platform;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
 
 public class Send implements Operation{
 
@@ -22,8 +22,8 @@ public class Send implements Operation{
 
     public Send(Request req) {
         this.req = req;
-        logManager = Run.u.getLogManager();
-        lockSys = Run.u.getLockSystem();
+        logManager = ServerApp.unifier.getLogManager();
+        lockSys = ServerApp.unifier.getLockSystem();
     }
 
     @Override
@@ -31,29 +31,35 @@ public class Send implements Operation{
         Mail email = req.getContent();
         ResponseName name;
         ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(req.getSender()).writeLock();
-//        ReentrantReadWriteLock.WriteLock writeLock =
-//                syncManager.getLock(req.auth()).writeLock();
 
-        //check for null object or if the recipients of the email actually exist.
+
         if (email == null){
             name = ResponseName.ILLEGAL_PARAMS;
+            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+                    (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
+                            .append("[Warning] :")
+                            .append("||").append(ResponseName.ILLEGAL_PARAMS)).toString(), LogType.WARNING) ));
         }
+
         else if (!email.getReceivers().stream().allMatch(receiver ->
-                Run.u.getDao().checkUser(receiver))){
+                ServerApp.unifier.getDao().checkUser(receiver))){
             name = ResponseName.INVALID_RECIPIENTS;
+            logResponse(name, req);
         }
         else {
 
             lock.lock();
-            boolean result = Run.u.getDao()
+            boolean result = ServerApp.unifier.getDao()
                     .save(email, email.getSender());
             lock.unlock();
 
 
             if (!result){
                 name = ResponseName.OP_ERROR;
-                Platform.runLater(()->Run.u.getLogManager().printNewLog(new Log(ResponseName.OP_ERROR.toString(), LogType.WARNING) ));
-
+                Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+                        (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
+                                .append("[Warning] :")
+                                .append(ResponseName.OP_ERROR)).toString(), LogType.WARNING) ));
             }
             else {
                 boolean allSends = true;
@@ -64,7 +70,7 @@ public class Send implements Operation{
                         lock = lockSys.getLock(receiver).writeLock();
 
                         lock.lock();
-                        if (!Run.u.getDao()
+                        if (!ServerApp.unifier.getDao()
                                 .save(email, receiver)) {
                             allSends = false;
                         }
@@ -78,11 +84,14 @@ public class Send implements Operation{
                         ResponseName.SUCCESS :
                         ResponseName.OP_ERROR;
             }
+            logResponse(name, req);
         }
-
-        Platform.runLater(()->Run.u.getLogManager().printNewLog(new Log(req.toString(), LogType.INFO) ));
 
 
         return new Response(name, null);
+
     }
+
+
+
 }

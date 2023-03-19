@@ -1,19 +1,13 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
-import it.edu.unito.eserver.Run;
+import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
-import it.edu.unito.eserver.model.Log.Log;
 import it.edu.unito.eserver.model.Log.LogManager;
-import it.edu.unito.eserver.model.Log.LogType;
-import it.edu.unito.oModels.Mail;
-import it.edu.unito.oModels.Request;
-import it.edu.unito.oModels.Response;
-import it.edu.unito.oModels.ResponseName;
-import javafx.application.Platform;
-
+import it.edu.unito.eclientlib.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
 
 public class Fetch implements Operation{
 
@@ -23,8 +17,8 @@ public class Fetch implements Operation{
 
     public Fetch(Request req) {
         this.req = req;
-        logManager = Run.u.getLogManager();
-        lockSys = Run.u.getLockSystem();
+        logManager = ServerApp.unifier.getLogManager();
+        lockSys = ServerApp.unifier.getLockSystem();
     }
 
     @Override
@@ -33,18 +27,19 @@ public class Fetch implements Operation{
         ResponseName name;
         ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(req.getSender()).writeLock();
 
-
         lock.lock();
-        mails = Run.u.getDao().fetch(req.getSender()).stream().toList();
+        mails = ServerApp.unifier.getDao().fetch(req.getSender()).stream().toList();
 
         lock.unlock();
         name = (mails.size()>=0) ?
                 ResponseName.SUCCESS :
                 ResponseName.OP_ERROR;
 
-        Platform.runLater(()->Run.u.getLogManager().printNewLog(new Log(name.toString(), LogType.INFO) ));
 
 
+
+          logResponse(name, req);
         return new Response(name, mails);
+
     }
 }

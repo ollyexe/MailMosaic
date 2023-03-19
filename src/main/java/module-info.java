@@ -7,16 +7,14 @@ module com.example.eserver {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+    requires it.edu.unito.eclientlib;
 
     exports it.edu.unito.eserver;
     opens it.edu.unito.eserver to javafx.fxml;
     exports it.edu.unito.eserver.controller;
     opens it.edu.unito.eserver.controller to javafx.fxml;
-    exports it.edu.unito.eserver.model.Log;
-    opens it.edu.unito.eserver.model.Log to javafx.fxml;
-    exports it.edu.unito.eserver.model.DAO;
-    opens it.edu.unito.eserver.model.DAO to javafx.fxml;
-    exports it.edu.unito.oModels;
-    opens it.edu.unito.oModels to javafx.fxml;
+    exports it.edu.unito.eserver.model.Server;
+    opens it.edu.unito.eserver.model.Server to javafx.fxml;
+
 
 }

@@ -1,13 +1,14 @@
 package it.edu.unito.eserver.model.DAO;
 
-import it.edu.unito.oModels.Mail;
+
+import it.edu.unito.eclientlib.*;
+import it.edu.unito.eserver.model.Log.LogManager;
 
 import java.io.*;
 import java.util.*;
 
 public class Dao {
-    private final String memory = new File("").getAbsolutePath() +"/src/main/java/it/edu/unito/eserver/memory/";
-
+    private final String memory = new File("").getAbsolutePath() +"/eserver/src/main/java/it/edu/unito/eserver/memory";
     private static  Dao instance = new Dao();
     private Dao() {
     }
@@ -15,14 +16,12 @@ public class Dao {
     public static Dao getInstance(){
         if (instance == null) {
             instance = new Dao() ;
-            System.out.println("new instance");
         }
-        System.out.println("already existing instance");
         return instance;
     }
     private  String findEmailPath(Mail mail, String user){
         int id = mail.getId();//hash code chages but doenst change the id --> first hach code when just created
-        System.out.println(id);
+
         File f = new File(memory + "/" + user +  "/" +  id + ".txt");
         return f.getAbsolutePath();
     }
@@ -101,18 +100,22 @@ public class Dao {
         return false;
     }
 
-    public void delete(Mail mail, String user){
+    public boolean delete(Mail mail, String user){
 
         Optional<File> file= Optional.of(new File(findEmailPath(mail, user)));
 
         if (file.isEmpty()) {
-            System.err.println("File nort found");
+            System.err.println("File not found");
         } else {
-            file.get().delete();;
+            file.get().delete();
         }
+
+        return !(new File(findEmailPath(mail, user)).exists());
 
     }
 
+
+    //controlla se l utente essite controllando se esiste una cartella con l username dell utente
     public boolean checkUser(String receiver) {
         String[] dirs = new File(memory).list(
                 (current, name) -> new File(current, name)

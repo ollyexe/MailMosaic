@@ -1,18 +1,17 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
-import it.edu.unito.eserver.Run;
+import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.Log;
 import it.edu.unito.eserver.model.Log.LogManager;
 import it.edu.unito.eserver.model.Log.LogType;
-import it.edu.unito.oModels.Mail;
-import it.edu.unito.oModels.Request;
-import it.edu.unito.oModels.Response;
-import it.edu.unito.oModels.ResponseName;
+import it.edu.unito.eclientlib.*;
 import javafx.application.Platform;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
 
 public class Read implements Operation{
 
@@ -22,8 +21,8 @@ public class Read implements Operation{
 
     public Read(Request req) {
         this.req = req;
-        logManager = Run.u.getLogManager();
-        lockSys = Run.u.getLockSystem();
+        logManager = ServerApp.unifier.getLogManager();
+        lockSys = ServerApp.unifier.getLockSystem();
     }
 
     @Override
@@ -38,22 +37,28 @@ public class Read implements Operation{
 
         if (mail == null){
             name = ResponseName.ILLEGAL_PARAMS;
+            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+                    (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
+                            .append("[Warning] :")
+                            .append(ResponseName.ILLEGAL_PARAMS)).toString(), LogType.WARNING) ));
         }
         else {
             writeLock.lock();
 
 
 
-            name = (Run.u.getDao()
+            name = (ServerApp.unifier.getDao()
                     .read(mail, req.getSender())) ?
                     ResponseName.SUCCESS :
                     ResponseName.OP_ERROR;
 
             writeLock.unlock();
+            logResponse(name, req);
         }
-        Platform.runLater(()->Run.u.getLogManager().printNewLog(new Log(name.toString(), LogType.INFO) ));
 
-        Platform.runLater(()->Run.u.getLogManager().printNewLog(new Log(req.getOpName().name(), LogType.WARNING) ));
+
+
         return new Response(name, null);
+
     }
 }
