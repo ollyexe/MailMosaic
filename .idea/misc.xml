@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/eserver/elib/pom.xml" />
         <option value="$PROJECT_DIR$/eserver/ser/pom.xml" />
         <option value="$PROJECT_DIR$/eserver/server/pom.xml" />
+        <option value="$PROJECT_DIR$/server/pom.xml" />
       </list>
     </option>
   </component>

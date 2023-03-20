@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 public class Dao {
-    private final String memory = new File("").getAbsolutePath() +"/eserver/src/main/java/it/edu/unito/eserver/memory";
+    private final String memory = new File("").getAbsolutePath() +"/server/src/main/java/it/edu/unito/eserver/memory";
     private static  Dao instance = new Dao();
     private Dao() {
     }
