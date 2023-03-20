@@ -54,7 +54,7 @@ public class Server extends Thread{
         InputStream input = null;
         Properties proprieties = new Properties();
         try {
-            input = new FileInputStream("eserver/src/main/resources/app.properties");
+            input = new FileInputStream("eserver/server/src/main/resources/app.properties");
 
             // load a properties file
             proprieties.load(input);
