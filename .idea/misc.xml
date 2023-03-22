@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/eserver/ser/pom.xml" />
         <option value="$PROJECT_DIR$/eserver/server/pom.xml" />
         <option value="$PROJECT_DIR$/server/pom.xml" />
+        <option value="$PROJECT_DIR$/client/pom.xml" />
       </list>
     </option>
   </component>

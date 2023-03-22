@@ -37,6 +37,12 @@ public class Mail implements Serializable,Comparable<Mail>{
         this.read=false;
     }
 
+    public static Mail generateEmptyEmail() {
+        Mail m = new Mail("", List.of(""), "",
+                "");
+        m.date=null;
+        return m;
+    }
 
 
     public int getId() {
@@ -97,7 +103,7 @@ public class Mail implements Serializable,Comparable<Mail>{
                 ", receivers=" + receivers +
                 ", subject='" + subject + '\'' +
                 ", text='" + text + '\'' +
-                ", date=" + date.format(Util.formatter) +
+                ", date=" + (date==null?"null":date.format(Util.formatter)) +
                 ", read=" + read +
                 '}';
     }

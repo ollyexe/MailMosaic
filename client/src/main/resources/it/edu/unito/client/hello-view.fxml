@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="it.edu.unito.client.Controller">
+
+  <Panel prefHeight="200.0" prefWidth="200.0" styleClass="">
+
+    <center>
+      <ListView fx:id="mailListView" prefHeight="432.0" prefWidth="261.0" />
+    </center>
+  </Panel>
+</VBox>
