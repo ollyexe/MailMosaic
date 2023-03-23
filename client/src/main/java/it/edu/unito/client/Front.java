@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class Front extends Application {
     public static Model model = new Model();
@@ -23,7 +24,7 @@ public class Front extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Front.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
         Controller c = fxmlLoader.getController();
 
@@ -35,7 +36,7 @@ public class Front extends Application {
             public void run() {
                 Platform.runLater(() -> {
                     // Generate some random mail objects for testing
-                    List<Mail> newMails =new Client().fetch();
+                    List<Mail> newMails =Client.getInstance().fetch().stream().filter(mail -> mail.getReceivers().contains("gionni@gmail.com")).toList();
 
                     // Update the ListView items with the new mail objects
                     ObservableList <Mail> items = c.getMailListView().getItems();
@@ -62,7 +63,7 @@ public class Front extends Application {
     public static void main(String[] args) {
         ScheduledExecutorService fetcher = Executors.newSingleThreadScheduledExecutor();
          model = new Model();
-         client = new Client();
+         client = Client.getInstance();
 
         launch();
 

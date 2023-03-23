@@ -13,12 +13,12 @@ import java.util.concurrent.Executors;
 import static it.edu.unito.client.Front.model;
 
 public class Client {
-    private ExecutorService pool;
+    private final ExecutorService pool;
     private Socket socket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     static Properties prop;
-    public Client(){
+    private Client(){
          prop = loadProp();
         String usr;
         if (Util.checkUser(prop.getProperty("client.usr"))){
@@ -58,6 +58,10 @@ public class Client {
             }
         }
         return proprieties;
+    }
+
+    public static Client getInstance(){
+        return new Client();
     }
 
 //    public void sendRequest(OperationName reqType, Mail content,
@@ -138,14 +142,16 @@ public class Client {
                 .stream()
                 .filter(email -> !model.getInboxContent().contains(email))
                 .toList();
-//        if (!l.isEmpty()){
-//            Platform.runLater(() -> model.addEmails(l));
-////            if (!lastFetch.equals(new Date(Long.MIN_VALUE))){
-////                AlertManager.showSuccessSendMessage(AlertText.NEW_EMAILS, 2);
-////            }
-//        }
 
         return l;
+    }
+
+    public void read(Mail mail){
+
+                processRequest(new Request("gionni@gmail.com",OperationName.PUT,mail));
+
+        //TODO mail
+
     }
 
 
