@@ -1,11 +1,9 @@
 package it.edu.unito.client;
 
 import it.edu.unito.eclientlib.Mail;
-import it.edu.unito.eclientlib.OperationName;
-import it.edu.unito.eclientlib.Request;
 import it.edu.unito.eclientlib.Util;
-import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,9 +13,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
 
-import java.util.Objects;
-
-import static it.edu.unito.client.Front.model;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class Controller {
@@ -31,19 +29,32 @@ public class Controller {
     public Label subjectLabel;
     @FXML
     public Label dateLabel;
+    public Label owner;
+
+
     @FXML
     private ListView<Mail> mailListView;
 
-    Mail selectedMail;
+    private ObservableList<Mail> inboxContent;
 
-    private ObservableList<Mail> inbox;
+    private ListProperty<Mail> inboxProp;
+    static Mail selectedMail;
+    Mail emptyMail;
 
     @FXML
     public void initialize(){
-        inbox= FXCollections.observableArrayList(
-                Mail.generateEmptyEmail()
-        );
-        mailListView.setItems(inbox);
+        emptyMail = Mail.generateEmptyEmail();
+        selectedMail = emptyMail;
+        inboxContent= FXCollections.observableList(Collections.
+                synchronizedList(new ArrayList<>()));
+        inboxProp=new SimpleListProperty<>();
+        inboxProp.set(inboxContent);
+        owner.setText(Client.prop.getProperty("client.usr"));
+        //binding tra lstEmails e inboxProperty
+        mailListView.itemsProperty().bind(inboxProp);
+        setListViewCellsListeners(mailListView);
+
+
     }
 
     public ListView<Mail> getMailListView() {
@@ -51,7 +62,7 @@ public class Controller {
     }
 
     public ObservableList<Mail> getInbox() {
-        return inbox;
+        return inboxContent;
     }
 
 
@@ -72,16 +83,25 @@ public class Controller {
         mailList.setCellFactory(cell -> new ListCell<>(){
             @Override
             protected void updateItem(Mail mail,boolean empty){
+                super.updateItem(mail,empty);
 
 
-                String tumadre="ggg";
-                setOnMouseClicked(mouseEvent -> {
-                    Mail m = mailList.getSelectionModel().getSelectedItem();
+                if (mail!=null){
 
-                    Controller.this.selectedMail=m;
-                    updateSelectedMailView(selectedMail);
+                    setText(mail.toString());
+                    if (!mail.isRead()){
+                        setStyle("-fx-font-weight: bold;");
+                    }
 
-                });
+
+                    setOnMouseClicked(mouseEvent -> {
+                        setStyle(null);
+                         selectedMail = mailList.getSelectionModel().getSelectedItem();
+                        updateSelectedMailView(selectedMail);
+
+
+                    });
+                }
             }
         }
 
@@ -99,6 +119,7 @@ public class Controller {
             if (!(mail.isRead())){
                 Client.getInstance().read(mail);
             }
+
 
         }
 

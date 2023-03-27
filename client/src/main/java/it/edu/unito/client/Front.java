@@ -18,14 +18,17 @@ import java.util.TimerTask;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+import static it.edu.unito.client.Controller.selectedMail;
+
 public class Front extends Application {
     public static Model model = new Model();
     public static Client client;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Front.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Front.class.getResource("client.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+
+        stage.setTitle("Welcome back ");
         Controller c = fxmlLoader.getController();
 
 
@@ -40,8 +43,14 @@ public class Front extends Application {
 
                     // Update the ListView items with the new mail objects
                     ObservableList <Mail> items = c.getMailListView().getItems();
-                    items.clear();
-                    items.addAll(newMails);
+
+                    Platform.runLater(()-> {
+                        items.setAll(newMails);
+                        //fa in modo che mantenga la selezione
+                        c.getMailListView().getSelectionModel().select(selectedMail);
+                    });
+
+
                 });
             }
         }, 0, 5000); // Update the ListView every 5 seconds
@@ -61,7 +70,6 @@ public class Front extends Application {
     }
 
     public static void main(String[] args) {
-        ScheduledExecutorService fetcher = Executors.newSingleThreadScheduledExecutor();
          model = new Model();
          client = Client.getInstance();
 

@@ -97,15 +97,7 @@ public class Mail implements Serializable,Comparable<Mail>{
 
     @Override
     public String toString() {
-        return "Mail{" +
-                "id=" + id +
-                ", sender='" + sender + '\'' +
-                ", receivers=" + receivers +
-                ", subject='" + subject + '\'' +
-                ", text='" + text + '\'' +
-                ", date=" + (date==null?"null":date.format(Util.formatter)) +
-                ", read=" + read +
-                '}';
+        return getSubject()+"-"+getSender();
     }
 
 

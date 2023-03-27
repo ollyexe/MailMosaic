@@ -32,6 +32,10 @@ public class Client {
 
 
     }
+    public static Client getInstance(){
+        return new Client();
+    }
+
     private Properties loadProp(){
         InputStream input = null;
         Properties proprieties = new Properties();
@@ -58,10 +62,6 @@ public class Client {
             }
         }
         return proprieties;
-    }
-
-    public static Client getInstance(){
-        return new Client();
     }
 
 //    public void sendRequest(OperationName reqType, Mail content,

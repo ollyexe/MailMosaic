@@ -24,3 +24,49 @@
 
     -fx-text-fill: #FFFFFF;
 }
+
+
+
+
+.new-button {
+    -fx-background-color: #3d4449;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-border-radius: 50%;
+}
+
+.delete-button {
+    -fx-background-color: #c91026;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-border-radius: 50%;
+}
+.reply-button {
+    -fx-background-color: #107cc9;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-border-radius: 50%;
+}
+.reply-all-button {
+    -fx-background-color: #03da26;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-border-radius: 50%;
+}
+
+.welcome{
+
+    -fx-margin-bottom: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d0c923;
+    -fx-font-size: 20px;
+
+}

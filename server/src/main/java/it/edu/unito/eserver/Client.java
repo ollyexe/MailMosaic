@@ -16,7 +16,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        System.out.println(call(new Request("gionni@gmail.com",OperationName.POST,new Mail("gionni@gmail.com", List.of("olly@gmail.com","gionni@gmail.com"),"lavoro notturno","hello", LocalDateTime.parse("25/05/2023 12:12:12", Util.formatter)))).getContent());
+        System.out.println(call(new Request("gionni@gmail.com",OperationName.POST,new Mail("gionni@gmail.com", List.of("olly@gmail.com","gionni@gmail.com"),"lavoo notturno","hllllo", LocalDateTime.parse("25/05/2023 12:12:12", Util.formatter)))).getContent());
 
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
