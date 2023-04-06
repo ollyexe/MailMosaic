@@ -1,7 +1,6 @@
 package it.edu.unito.client;
 
 import it.edu.unito.eclientlib.Mail;
-import it.edu.unito.eclientlib.OperationName;
 import it.edu.unito.eclientlib.Util;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,22 +14,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import static it.edu.unito.client.Controller.selectedMail;
 
-public class Front extends Application {
+public class ClientApp extends Application {
     public static Model model = new Model();
     public static Client client;
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Front.class.getResource("client.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader = new FXMLLoader(ClientApp.class.getResource("client.fxml"));
 
+        Scene main = new Scene(fxmlLoader.load());
         stage.setTitle("Welcome back ");
         Controller c = fxmlLoader.getController();
-
 
         //fetch every 5 seconds from server
         Timer timer = new Timer();
@@ -60,7 +57,7 @@ public class Front extends Application {
         System.out.println("Client started at : "+ LocalDateTime.now().format(Util.formatter));
 
 
-        stage.setScene(scene);
+        stage.setScene(main);
         stage.show();
     }
     @Override

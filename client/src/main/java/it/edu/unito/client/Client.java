@@ -1,7 +1,6 @@
 package it.edu.unito.client;
 
 import it.edu.unito.eclientlib.*;
-import javafx.application.Platform;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,7 +9,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static it.edu.unito.client.Front.model;
+import static it.edu.unito.client.ClientApp.model;
 
 public class Client {
     private final ExecutorService pool;

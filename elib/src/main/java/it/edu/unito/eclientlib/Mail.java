@@ -97,7 +97,7 @@ public class Mail implements Serializable,Comparable<Mail>{
 
     @Override
     public String toString() {
-        return getSubject()+"-"+getSender();
+        return getSubject()+" -> "+getSender();
     }
 
 

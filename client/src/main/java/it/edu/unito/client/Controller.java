@@ -6,16 +6,25 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 
 public class Controller {
@@ -125,4 +134,19 @@ public class Controller {
 
     }
 
+
+
+
+
+    public static Scene scene;
+
+
+    @FXML
+    public void onComposeButtonClick(MouseEvent mouseEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("compose.fxml")));
+        Stage stage = new Stage();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }
