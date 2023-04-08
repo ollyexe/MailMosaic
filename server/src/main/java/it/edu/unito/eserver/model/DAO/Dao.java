@@ -2,10 +2,15 @@ package it.edu.unito.eserver.model.DAO;
 
 
 import it.edu.unito.eclientlib.*;
+import it.edu.unito.eserver.ServerApp;
+import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.LogManager;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Dao {
     private final String memory = new File("").getAbsolutePath() +"/server/src/main/java/it/edu/unito/eserver/memory";
@@ -69,11 +74,11 @@ public class Dao {
         return emails;
     }
 
-    public boolean read(Mail mail, String user){
+    public boolean read(Mail mail, String user)  {
 
         File emailsFiles = new File(findEmailPath(mail, user));
-        FileInputStream fin;
-        ObjectInputStream obj;
+        FileInputStream fin ;
+        ObjectInputStream obj ;
         Mail actEmail;
 
         try {
@@ -81,7 +86,8 @@ public class Dao {
                 fin = new FileInputStream(Objects.requireNonNull(emailsFiles));
                 obj = new ObjectInputStream(fin);
                 actEmail=(Mail) obj.readObject();
-
+            fin.close();
+            obj.close();
                 if (mail.getReceivers().contains(user)){
                     actEmail.setRead(true);
                     return save(actEmail,user);
@@ -100,14 +106,20 @@ public class Dao {
         return false;
     }
 
-    public boolean delete(Mail mail, String user){
+    public boolean delete(Mail mail, String user) throws IOException {
 
         Optional<File> file= Optional.of(new File(findEmailPath(mail, user)));
 
         if (file.isEmpty()) {
-            System.err.println("File not found");
+            return false;
         } else {
-            file.get().delete();
+            LockSystem lockSys;
+            lockSys = ServerApp.unifier.getLockSystem();
+            ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(user).writeLock();
+
+            lock.lock();
+            boolean b = Files.deleteIfExists(Path.of(file.get().getAbsolutePath()));
+            lock.unlock();
         }
 
         return !(new File(findEmailPath(mail, user)).exists());

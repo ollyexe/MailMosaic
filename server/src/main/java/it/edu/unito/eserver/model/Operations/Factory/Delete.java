@@ -8,6 +8,7 @@ import it.edu.unito.eserver.model.Log.LogType;
 import it.edu.unito.eclientlib.*;
 import javafx.application.Platform;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -25,7 +26,7 @@ public class Delete implements Operation{
 
 
     @Override
-    public Response handle(){
+    public Response handle()  {
         Mail email = req.getContent();
         ResponseName name;
         ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(req.getSender()).writeLock();
@@ -38,7 +39,13 @@ public class Delete implements Operation{
                             .append(ResponseName.ILLEGAL_PARAMS)).toString(), LogType.WARNING) ));
         }else {
             lock.lock();
-                boolean result = ServerApp.unifier.getDao().delete(email,req.getSender());
+            boolean result;
+            try {
+                result = ServerApp.unifier.getDao().delete(email,req.getSender());
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             lock.unlock();
 
             name = (result) ?

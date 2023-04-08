@@ -1,6 +1,9 @@
 package it.edu.unito.client;
 
+import it.edu.unito.client.alerts.AlertManager;
+import it.edu.unito.client.alerts.AlertText;
 import it.edu.unito.eclientlib.Mail;
+import it.edu.unito.eclientlib.Util;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static it.edu.unito.client.ClientApp.model;
 
 public class Compose extends Controller{
 
@@ -76,19 +81,33 @@ public class Compose extends Controller{
 
 
     @FXML
-    private void onSendButtonClick() {
+    private void onSendButtonClick() throws InterruptedException {
         String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
-//        if (Arrays.stream(recipientsArray).allMatch(CommonUtil::validateEmail)){
-//            Mail email = new Mail(senderTextField.getText(),
-//                    new ArrayList<>(List.of(recipientsArray)),
-//                    objectTextField.getText(), messageEditor.getText());
-//
-//            model.getClient().sendCmd(CommandName.SEND_EMAIL, email,
-//                    ClientApp.sceneController.getController(SceneName.COMPOSE),
-//                    (obj) -> Platform.runLater( () -> send(obj)), email);
-//        } else {
-//            AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
-//        }
+        if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
+            Mail email = new Mail(senderTextField.getText(),
+                    new ArrayList<>(List.of(recipientsArray)),
+                    objectTextField.getText(), messageEditor.getText());
+
+
+            if (Client.getInstance().send(email)){
+                //clearing all fields
+                recipientsTextField.clear();
+                objectTextField.clear();
+                messageEditor.setText("");
+                AlertManager.showTemporizedAlert(successAlert, AlertText.MESSAGE_SENT, 2);
+                Stage stage=(Stage) Controller.scene.getWindow();
+                stage.close();
+
+            }else {
+                AlertManager.showTemporizedAlert(dangerAlert, AlertText.OP_ERROR, 2);
+
+            }
+
+
+        } else {
+            AlertManager.showTemporizedAlert(dangerAlert, AlertText.INVALID_RECIPIENTS, 2);
+        }
+
     }
 
 

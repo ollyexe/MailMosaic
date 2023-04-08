@@ -21,4 +21,7 @@ public class Util {
         return dirs != null && dirs.length != 0 &&
                 Arrays.stream(dirs).toList().contains(receiver);
     }
+    public static boolean validateEmail(String email){
+        return Pattern.matches("^(.+?)@gmail.com", email);
+    }
 }

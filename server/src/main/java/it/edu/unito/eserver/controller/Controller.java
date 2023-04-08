@@ -33,12 +33,12 @@ public class Controller {
 
 
                  if (logItem!=null){
-                     if (logItem.getType()==LogType.INFO&&!empty){
+                     if (logItem.getType()==LogType.INFO){
                          getStyleClass().add("info");
                      }
-                     else if (logItem.getType()==LogType.WARNING&&!empty)
+                     else if (logItem.getType()==LogType.WARNING)
                          getStyleClass().add("warning");
-                     else if (logItem.getType()==LogType.SYS&&!empty) {
+                     else if (logItem.getType()==LogType.SYS) {
                          getStyleClass().add("sys");
                      }
                      else getStyleClass().add("warning");

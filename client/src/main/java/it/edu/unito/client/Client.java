@@ -145,6 +145,13 @@ public class Client {
         return l;
     }
 
+    public boolean send(Mail mail){
+
+        Response resp = processRequest(new Request("gionni@gmail.com",OperationName.POST,mail));//TODO mail
+
+        return resp.getResponseName().equals(ResponseName.SUCCESS);
+    }
+
     public void read(Mail mail){
 
                 processRequest(new Request("gionni@gmail.com",OperationName.PUT,mail));
@@ -154,4 +161,7 @@ public class Client {
     }
 
 
+    public Response delete(Mail selectedMail) {
+        return processRequest(new Request("gionni@gmail.com",OperationName.DELETE,selectedMail));
+    }
 }

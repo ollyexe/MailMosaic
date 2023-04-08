@@ -38,9 +38,9 @@ public class Mail implements Serializable,Comparable<Mail>{
     }
 
     public static Mail generateEmptyEmail() {
-        Mail m = new Mail("", List.of(""), "",
-                "");
-        m.date=null;
+        Mail m =  new Mail("", List.of(""), "",
+                "",LocalDateTime.now());
+        m.setRead(true);
         return m;
     }
 

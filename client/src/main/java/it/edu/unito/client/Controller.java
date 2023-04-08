@@ -2,6 +2,7 @@ package it.edu.unito.client;
 
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
+import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Controller {
@@ -49,9 +52,13 @@ public class Controller {
     private ListProperty<Mail> inboxProp;
     static Mail selectedMail;
     Mail emptyMail;
+    private  ExecutorService appFX;
+    public static Scene scene;
 
     @FXML
     public void initialize(){
+        appFX= Executors.newFixedThreadPool(Integer.parseInt(Client.prop.getProperty("client.threads_count")));
+
         emptyMail = Mail.generateEmptyEmail();
         selectedMail = emptyMail;
         inboxContent= FXCollections.observableList(Collections.
@@ -138,15 +145,37 @@ public class Controller {
 
 
 
-    public static Scene scene;
+
+
 
 
     @FXML
     public void onComposeButtonClick(MouseEvent mouseEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("compose.fxml")));
-        Stage stage = new Stage();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        appFX.execute(() -> {
+            Platform.runLater(() -> {
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("compose.fxml")));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Stage stage = new Stage();
+                stage.setTitle("Write a new e-mail");
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            });
+        });
+
+    }
+
+
+
+
+    @FXML
+    public void ondeleteButtonClick(MouseEvent mouseEvent) {
+        Client.getInstance().delete(selectedMail);
+        selectedMail = emptyMail;
+        updateSelectedMailView(selectedMail);
     }
 }

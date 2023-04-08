@@ -57,12 +57,12 @@ public class LogManager {
             Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
                     (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
                             .append("[Warning] :")
-                            .append(ResponseName.ILLEGAL_PARAMS).append("||").append(req.toString())).toString(), LogType.WARNING) ));
+                            .append(ResponseName.ILLEGAL_PARAMS).append("||").append(req.toString()).append("||").append(name)).toString(), LogType.WARNING) ));
         } else {
             Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
                     (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
                             .append("[Warning] :")
-                            .append("||").append(req.toString())).toString(), LogType.WARNING) ));
+                            .append("||").append(req.toString()).append("||").append(name)).toString(), LogType.WARNING) ));
         }
 
 
