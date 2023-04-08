@@ -24,7 +24,7 @@ public class Model {
         inboxProp = new SimpleListProperty<>();
         inboxProp.set(inbox);
 
-        this.emailAddress = new SimpleStringProperty("gionni@gmail.com");
+        this.emailAddress = new SimpleStringProperty(Client.getInstance().usr);
 
     }
 

@@ -1,25 +1,24 @@
-package it.edu.unito.client;
+package it.edu.unito.client.Controllers;
 
+import it.edu.unito.client.Client;
 import it.edu.unito.client.alerts.AlertManager;
 import it.edu.unito.client.alerts.AlertText;
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.LineTo;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static it.edu.unito.client.ClientApp.model;
 
-public class Compose extends Controller{
+public class ReplyController {
 
     @FXML
     public Button cancelBtn;
@@ -38,16 +37,35 @@ public class Compose extends Controller{
     @FXML
     private TextArea messageEditor;
 
+    private String emptyRow="\n";
+
+    public void setSelectedMail(Mail selectedMail) {
+        this.selectedMail = selectedMail;
+        recipientsTextField.setText((selectedMail.getSender()).replace("[","").replace("]",""));
+        recipientsTextField.setEditable(false);
+        objectTextField.setText("Reply : "+selectedMail.getSubject());
+        objectTextField.setEditable(false);
+
+
+    }
+
+
+
+    Mail selectedMail ;
 
     public TextFlow getSuccessAlert() { return successAlert; }
 
     public TextFlow getDangerAlert() { return dangerAlert; }
 
 
+    public ReplyController() {
+    }
+
     @FXML
     public void initialize(){
         senderTextField.setEditable(false);
         senderTextField.setText(Client.prop.getProperty("client.usr"));
+
     }
 
 
@@ -75,8 +93,8 @@ public class Compose extends Controller{
         objectTextField.clear();
         messageEditor.setText("");
 
-       Stage stage=(Stage) Controller.scene.getWindow();
-       stage.close();
+        Stage stage=(Stage) MainController.scene.getWindow();
+        stage.close();
     }
 
 
@@ -95,7 +113,7 @@ public class Compose extends Controller{
                 objectTextField.clear();
                 messageEditor.setText("");
                 AlertManager.showTemporizedAlert(successAlert, AlertText.MESSAGE_SENT, 2);
-                Stage stage=(Stage) Controller.scene.getWindow();
+                Stage stage=(Stage) MainController.scene.getWindow();
                 stage.close();
 
             }else {

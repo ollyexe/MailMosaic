@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 <AnchorPane prefHeight="615.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.edu.unito.client.Compose"  >
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.edu.unito.client.Controllers.ReplyController"  >
     <Label layoutX="9.0" layoutY="23.0" text="Sender:" AnchorPane.leftAnchor="4.0"/>
     <Label layoutX="4.0" layoutY="65.0" text="Receivers:" AnchorPane.leftAnchor="4.0"/>
     <Label layoutX="12.0" layoutY="111.0" prefHeight="17.0" prefWidth="46.0" text="Object:"
@@ -18,7 +18,7 @@
                AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="13.0"/>
     <TextArea fx:id="messageEditor"
               layoutX="10.0" layoutY="149.0" prefHeight="440.0" prefWidth="602.0" AnchorPane.bottomAnchor="103.0"
-                AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="149.0"/>
+              AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="149.0"/>
     <Button fx:id="cancelBtn" layoutX="14.0" layoutY="637.0" mnemonicParsing="false"
             onMouseClicked="#onCancelButtonClick" prefHeight="41.0" prefWidth="72.0" text="Cancel"
             AnchorPane.bottomAnchor="10.0">

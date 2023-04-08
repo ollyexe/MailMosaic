@@ -1,5 +1,6 @@
 package it.edu.unito.client;
 
+import it.edu.unito.client.Controllers.MainController;
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
 import javafx.application.Application;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static it.edu.unito.client.Controller.selectedMail;
+import static it.edu.unito.client.Controllers.MainController.selectedMail;
 
 public class ClientApp extends Application {
     public static Model model = new Model();
@@ -26,8 +27,9 @@ public class ClientApp extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(ClientApp.class.getResource("client.fxml"));
 
         Scene main = new Scene(fxmlLoader.load());
-        stage.setTitle("Welcome back ");
-        Controller c = fxmlLoader.getController();
+        stage.setTitle("Hello "+Client.prop.getProperty("client.usr"));
+        stage.setResizable(false);
+        MainController c = fxmlLoader.getController();
 
         //fetch every 5 seconds from server
         Timer timer = new Timer();
@@ -36,13 +38,15 @@ public class ClientApp extends Application {
             public void run() {
                 Platform.runLater(() -> {
                     // Generate some random mail objects for testing
-                    List<Mail> newMails =Client.getInstance().fetch().stream().filter(mail -> mail.getReceivers().contains("gionni@gmail.com")).toList();
+                    List<Mail> newMails =Client.getInstance().fetch().stream().filter(mail -> mail.getReceivers().contains(Client.getInstance().usr)).toList();
 
                     // Update the ListView items with the new mail objects
                     ObservableList <Mail> items = c.getMailListView().getItems();
 
                     Platform.runLater(()-> {
+                        items.clear();
                         items.setAll(newMails);
+
                         //fa in modo che mantenga la selezione
                         c.getMailListView().getSelectionModel().select(selectedMail);
                     });

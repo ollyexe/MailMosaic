@@ -10,7 +10,12 @@ public class Mail implements Serializable,Comparable<Mail>{
     private final int id;
     private final String sender;
     private final List<String> receivers;
-    private final String subject;
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    private  String subject;
     private final String text;
     private LocalDateTime date;
     private boolean read;
@@ -39,7 +44,7 @@ public class Mail implements Serializable,Comparable<Mail>{
 
     public static Mail generateEmptyEmail() {
         Mail m =  new Mail("", List.of(""), "",
-                "",LocalDateTime.now());
+                "",LocalDateTime.parse("2000-01-01T00:00:00"));
         m.setRead(true);
         return m;
     }
@@ -102,6 +107,11 @@ public class Mail implements Serializable,Comparable<Mail>{
 
 
 
-
-
+    public String toStringForForward() {
+        return "Message of " + date.format(Util.formatter) + ", \n" +
+                "sender : " + sender + ",\n" +
+                "receivers : " + receivers + ",\n" +
+                "subject : " + subject + ",\n" +
+                "text : " + text + '\n' ;
+    }
 }

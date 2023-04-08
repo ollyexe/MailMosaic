@@ -6,8 +6,8 @@ import it.edu.unito.eserver.model.Log.LogManager;
 import it.edu.unito.eclientlib.*;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
+
 
 public class Fetch implements Operation{
 
@@ -36,9 +36,6 @@ public class Fetch implements Operation{
                 ResponseName.OP_ERROR;
 
 
-
-
-          logResponse(name, req);
         return new Response(name, mails);
 
     }

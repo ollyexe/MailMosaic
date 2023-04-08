@@ -16,10 +16,11 @@ public class Client {
     private Socket socket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
-    static Properties prop;
+    public static Properties prop;
+    String usr;
     private Client(){
          prop = loadProp();
-        String usr;
+
         if (Util.checkUser(prop.getProperty("client.usr"))){
             usr = prop.getProperty("client.usr");
         } else {
@@ -63,22 +64,14 @@ public class Client {
         return proprieties;
     }
 
-//    public void sendRequest(OperationName reqType, Mail content,
-//                            Controller controller,
-//                            Object successArg){
-//
-//
-//            processResponse(processRequest(new Request("gionni@gmail.com", reqType, content)), controller, successArg);
-//    }
+
 
     public Response processRequest(Request request) {
-        ObjectOutputStream outputStream = null;
-        ObjectInputStream inputStream = null;
-        Socket socket=null;
+        ObjectOutputStream outputStream ;
+        ObjectInputStream inputStream ;
         // create a new Socket object and connect to the server on port 1234
 
-        try {
-            socket = new Socket("127.0.0.1", Integer.parseInt(prop.getProperty("client.server_port")));
+        try (Socket socket = new Socket("127.0.0.1", Integer.parseInt(prop.getProperty("client.server_port")));){
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream  = new ObjectInputStream(socket.getInputStream());
             outputStream.writeObject(request);
@@ -135,7 +128,7 @@ public class Client {
 
     public List<Mail> fetch(){
 
-        Response resp = processRequest(new Request("gionni@gmail.com",OperationName.GET));//TODO mail
+        Response resp = processRequest(new Request(usr,OperationName.GET));
 
         List<Mail> l = resp.getContent()
                 .stream()
@@ -147,21 +140,27 @@ public class Client {
 
     public boolean send(Mail mail){
 
-        Response resp = processRequest(new Request("gionni@gmail.com",OperationName.POST,mail));//TODO mail
+        Response resp = processRequest(new Request(usr,OperationName.POST,mail));
 
         return resp.getResponseName().equals(ResponseName.SUCCESS);
     }
 
     public void read(Mail mail){
 
-                processRequest(new Request("gionni@gmail.com",OperationName.PUT,mail));
+                processRequest(new Request(usr,OperationName.PUT,mail));
 
-        //TODO mail
+
 
     }
 
 
     public Response delete(Mail selectedMail) {
-        return processRequest(new Request("gionni@gmail.com",OperationName.DELETE,selectedMail));
+        return processRequest(new Request(usr,OperationName.DELETE,selectedMail));
+    }
+
+    public void reply(Mail selectedMail) {
+        selectedMail.setSubject("R : "+selectedMail.getSubject());
+         send(selectedMail);
+
     }
 }

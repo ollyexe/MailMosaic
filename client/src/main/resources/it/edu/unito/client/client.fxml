@@ -16,22 +16,24 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.TextArea?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="it.edu.unito.client.Controller" stylesheets="@main_style.css">
+      fx:controller="it.edu.unito.client.Controllers.MainController" stylesheets="@main_style.css">
   <Panel  prefHeight="543.0" prefWidth="722.0">
 
-    <SplitPane dividerPositions="0.3" prefHeight="543.0" prefWidth="722.0">
-      <StackPane>
-        <Pane prefWidth="450.0" prefHeight="Infinity">
+    <SplitPane fx:id="splitPane" dividerPositions="0.35"  prefHeight="543.0" prefWidth="722.0">
+
+      <StackPane >
+        <Pane >
           <ListView fx:id="mailListView" onMouseClicked="#handleClickListView" />
 
-          <Button fx:id="composeBtn" onMouseClicked="#onComposeButtonClick" text="Scrivi" styleClass="new-button"  layoutX="85.0" layoutY="490.0" mnemonicParsing="false"/>
+          <Button fx:id="composeBtn" onMouseClicked="#onComposeButtonClick" text="Scrivi" styleClass="new-button"  layoutX="85.0" layoutY="500.0" mnemonicParsing="false"/>
         </Pane>
 
 
 
       </StackPane>
-      <Panel prefHeight="470.0" prefWidth="503.0" styleClass="">
+      <Panel >
 
 
 
@@ -65,7 +67,7 @@
               <center>
                 <AnchorPane styleClass="web-view" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0"
                             AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0">
-                  <WebView fx:id="emailContentTxt" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"
+                  <TextArea fx:id="emailContentTxt" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"
                            AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0"/>
                   <!--                     <TextFlow fx:id="dangerAlert" layoutX="245.0" layoutY="324.0" prefHeight="40.0"-->
                   <!--                               prefWidth="205.0" styleClass="alert, alert-danger" visible="false"-->
@@ -82,13 +84,13 @@
             </Panel>
 
 
-            <HBox spacing="10" alignment="BOTTOM_RIGHT">
-              <Label  text="Hello" styleClass="welcome" GridPane.columnIndex="1" alignment="BOTTOM_CENTER"/>
+            <HBox spacing="10" alignment="BOTTOM_RIGHT" >
 
-              <Label fx:id="owner" styleClass="welcome" text="Owner" GridPane.columnIndex="1" alignment="BOTTOM_CENTER"/>
 
-<!--              <Button fx:id="replyBtn" onMouseClicked="#onReplyButtonClick" text="Reply" styleClass="reply-button"/>-->
-<!--              <Button fx:id="replyAllBtn" onMouseClicked="#onReplyAllButtonClick" text="Reply All" styleClass="reply-all-button"/>-->
+
+              <Button fx:id="replyBtn" onMouseClicked="#onReplyButtonClick" text="Reply" styleClass="reply-button"/>
+              <Button fx:id="forwardButton" onMouseClicked="#onForwardButtonClick" text="Forward" styleClass="forward-button"/>
+
               <Button fx:id="deleteBtn" onMouseClicked="#ondeleteButtonClick" text="Delete" styleClass="delete-button"/>
             </HBox>
           </StackPane>

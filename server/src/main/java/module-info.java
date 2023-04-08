@@ -7,6 +7,8 @@ module com.example.eserver {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+
+
     requires it.edu.unito.eclientlib;
 
     exports it.edu.unito.eserver;

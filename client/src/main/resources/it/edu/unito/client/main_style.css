@@ -53,7 +53,7 @@
     -fx-padding: 10px;
     -fx-border-radius: 50%;
 }
-.reply-all-button {
+.forward-button {
     -fx-background-color: #03da26;
     -fx-text-fill: white;
     -fx-font-size: 15px;
