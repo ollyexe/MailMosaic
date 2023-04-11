@@ -29,23 +29,30 @@ public class Controller {
              @Override
              protected void updateItem(Log logItem, boolean empty){
                  super.updateItem(logItem, empty);
-                 setText((!empty && logItem != null) ? logItem.getContent() : null);
+
+                 if (empty) {
+                     setText(null);
+                     getStyleClass().add("log");
+                 }else {
+                     setText((!empty && logItem != null) ? logItem.getContent() : null);
 
 
-                 if (logItem!=null){
-                     if (logItem.getType()==LogType.INFO){
-                         getStyleClass().add("info");
+                     if (logItem!=null){
+                         if (logItem.getType()==LogType.INFO){
+                             getStyleClass().add("info");
+                         }
+                         else if (logItem.getType()==LogType.WARNING)
+                             getStyleClass().add("warning");
+                         else if (logItem.getType()==LogType.SYS) {
+                             getStyleClass().add("sys");
+                         }
+                         else getStyleClass().add("warning");
+
                      }
-                     else if (logItem.getType()==LogType.WARNING)
-                         getStyleClass().add("warning");
-                     else if (logItem.getType()==LogType.SYS) {
-                         getStyleClass().add("sys");
-                     }
-                     else getStyleClass().add("warning");
-
+                     getStyleClass().add("log");
+                     logList.scrollTo(lm.logProperty().size());
                  }
-                 getStyleClass().add("log");
-                 logList.scrollTo(lm.logProperty().size());
+
              }
 
          });

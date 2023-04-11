@@ -1,8 +1,6 @@
 package it.edu.unito.client.alerts;
 
 public enum AlertText {
-    INVALID_RECIPIENTS_FORMAT("Invalid recipients address, please check syntax and make sure that the " +
-            "domain is '@unito.it'!"),
     INVALID_RECIPIENTS("Invalid recipients address, some of them may not exists."),
     MESSAGE_SENT("Email sent with success!"),
     MESSAGE_DELETED("Email deleted with success!"),

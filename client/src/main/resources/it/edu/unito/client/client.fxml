@@ -17,6 +17,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="it.edu.unito.client.Controllers.MainController" stylesheets="@main_style.css">
   <Panel  prefHeight="543.0" prefWidth="722.0">
@@ -55,10 +57,10 @@
                   <children>
                     <Label prefHeight="17.0" prefWidth="35.0" styleClass="lbl"  text="From:" />
                     <Label styleClass="lbl"  text="To:" GridPane.rowIndex="1" />
-                    <Label styleClass="lbl"  text="Object:" GridPane.rowIndex="2" />
+                    <Label styleClass="lbl"  text="Subject:" GridPane.rowIndex="2" />
                     <Label text="Sender" fx:id="senderLabel" GridPane.columnIndex="1" />
                     <Label text="Receivers" fx:id="receiversLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    <Label text="Object" GridPane.columnIndex="1" fx:id="subjectLabel" GridPane.rowIndex="2" />
+                    <Label text="Subject" GridPane.columnIndex="1" fx:id="subjectLabel" GridPane.rowIndex="2" />
                     <Label prefWidth="60.0"  styleClass="lbl"  text="Date/Time:" GridPane.rowIndex="3" />
                     <Label text="Date" fx:id="dateLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   </children>
@@ -93,6 +95,14 @@
 
               <Button fx:id="deleteBtn" onMouseClicked="#ondeleteButtonClick" text="Delete" styleClass="delete-button"/>
             </HBox>
+            <TextFlow fx:id="dangerAlert" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" visible="false"
+                      style="-fx-background-color: #d03535; /* Light Red */
+                -fx-border-color: #ebccd1; /* Dark Red */
+                -fx-border-width: 1px;
+                -fx-border-radius: 5px;
+                -fx-padding: 20px;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+              <Text wrappingWidth="249.82421875"/>
+            </TextFlow>
           </StackPane>
 
 

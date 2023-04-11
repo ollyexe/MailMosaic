@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import static it.edu.unito.client.Controllers.MainController.selectedMail;
 public class ClientApp extends Application {
     public static Model model = new Model();
     public static Client client;
+    public static MainController mainController;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -29,7 +31,7 @@ public class ClientApp extends Application {
         Scene main = new Scene(fxmlLoader.load());
         stage.setTitle("Hello "+Client.prop.getProperty("client.usr"));
         stage.setResizable(false);
-        MainController c = fxmlLoader.getController();
+        mainController = fxmlLoader.getController();
 
         //fetch every 5 seconds from server
         Timer timer = new Timer();
@@ -38,17 +40,23 @@ public class ClientApp extends Application {
             public void run() {
                 Platform.runLater(() -> {
                     // Generate some random mail objects for testing
-                    List<Mail> newMails =Client.getInstance().fetch().stream().filter(mail -> mail.getReceivers().contains(Client.getInstance().usr)).toList();
+                    List<Mail> newMails =Client.getInstance().fetch().stream().filter(mail -> mail.getReceivers().contains(Client.getInstance().usr)).toList().stream().sorted(
+                            (o1, o2) -> {
+                                if (o2.getDate().isAfter(o1.getDate())){
+                                    return 1;
+                                }
+                                return -1;
+                            }).toList();
 
                     // Update the ListView items with the new mail objects
-                    ObservableList <Mail> items = c.getMailListView().getItems();
+                    ListView<Mail> mailList = mainController.getMailListView();
 
                     Platform.runLater(()-> {
-                        items.clear();
-                        items.setAll(newMails);
+                        mailList.getItems().clear();
+                        mailList.getItems().addAll(newMails);
 
                         //fa in modo che mantenga la selezione
-                        c.getMailListView().getSelectionModel().select(selectedMail);
+                        mainController.getMailListView().getSelectionModel().select(selectedMail);
                     });
 
 

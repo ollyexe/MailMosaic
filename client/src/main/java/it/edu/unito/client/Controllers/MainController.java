@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -41,8 +42,18 @@ public class MainController {
 
 
 
+
+
     @FXML
-    private ListView<Mail> mailListView;
+    public  TextFlow dangerAlert;
+
+
+    public void setMailListView(ListView<Mail> mailListView) {
+        this.mailListView = mailListView;
+    }
+
+    @FXML
+    public ListView<Mail> mailListView;
 
     private ObservableList<Mail> inboxContent;
 
@@ -96,24 +107,28 @@ public class MainController {
             @Override
             protected void updateItem(Mail mail,boolean empty){
                 super.updateItem(mail,empty);
+                if (empty) {
+                    setText(null);}
+                else{
+                    if (mail!=null){
+
+                        setText(mail.toString());
+                        if (!mail.isRead()){
+                            setStyle("-fx-font-weight: bold;");
+                        }
 
 
-                if (mail!=null){
+                        setOnMouseClicked(mouseEvent -> {
+                            setStyle(null);
+                            selectedMail = mailList.getSelectionModel().getSelectedItem();
+                            updateSelectedMailView(selectedMail);
 
-                    setText(mail.toString());
-                    if (!mail.isRead()){
-                        setStyle("-fx-font-weight: bold;");
+
+                        });
                     }
-
-
-                    setOnMouseClicked(mouseEvent -> {
-                        setStyle(null);
-                         selectedMail = mailList.getSelectionModel().getSelectedItem();
-                        updateSelectedMailView(selectedMail);
-
-
-                    });
                 }
+
+
             }
         }
 
@@ -150,11 +165,9 @@ public class MainController {
     public void onComposeButtonClick(MouseEvent mouseEvent) throws IOException {
         appFX.execute(() -> {
             Platform.runLater(() -> {
-                Parent root = null;
+                Parent root;
                 try {
                     root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("compose.fxml")));
-                    MainController cont = new FXMLLoader(Objects.requireNonNull(getClass().getResource("compose.fxml"))).getController();
-
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -1,5 +1,7 @@
 package it.edu.unito.client;
 
+import it.edu.unito.client.alerts.AlertManager;
+import it.edu.unito.client.alerts.AlertText;
 import it.edu.unito.eclientlib.*;
 
 import java.io.*;
@@ -9,6 +11,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static it.edu.unito.client.ClientApp.mainController;
 import static it.edu.unito.client.ClientApp.model;
 
 public class Client {
@@ -79,7 +82,11 @@ public class Client {
 
             return (Response) inputStream.readObject();
         } catch (ClassNotFoundException | IOException e) {
-            throw new RuntimeException(e);
+
+
+            AlertManager.showTemporizedAlert(mainController.dangerAlert, AlertText.NO_CONNECTION, 2);
+            throw new RuntimeException();
+
         }
 
     }

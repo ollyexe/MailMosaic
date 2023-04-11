@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Compose {
+public class ComposeController {
 
     @FXML
     public Button cancelBtn;

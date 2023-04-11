@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 <AnchorPane prefHeight="615.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.edu.unito.client.Controllers.Compose"  >
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.edu.unito.client.Controllers.ComposeController"  >
     <Label layoutX="9.0" layoutY="23.0" text="Sender:" AnchorPane.leftAnchor="4.0"/>
     <Label layoutX="4.0" layoutY="65.0" text="Receivers:" AnchorPane.leftAnchor="4.0"/>
     <Label layoutX="12.0" layoutY="111.0" prefHeight="17.0" prefWidth="46.0" text="Object:"
