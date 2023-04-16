@@ -89,6 +89,7 @@
             <HBox spacing="10" alignment="BOTTOM_RIGHT" >
 
 
+              <Button fx:id="replyAllBtn" onMouseClicked="#onReplyAllButtonClick" text="Reply All" styleClass="reply-all-button"/>
 
               <Button fx:id="replyBtn" onMouseClicked="#onReplyButtonClick" text="Reply" styleClass="reply-button"/>
               <Button fx:id="forwardButton" onMouseClicked="#onForwardButtonClick" text="Forward" styleClass="forward-button"/>
@@ -97,6 +98,14 @@
             </HBox>
             <TextFlow fx:id="dangerAlert" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" visible="false"
                       style="-fx-background-color: #d03535; /* Light Red */
+                -fx-border-color: #ebccd1; /* Dark Red */
+                -fx-border-width: 1px;
+                -fx-border-radius: 5px;
+                -fx-padding: 20px;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+              <Text wrappingWidth="249.82421875"/>
+            </TextFlow>
+            <TextFlow fx:id="newMailAlert" layoutX="830.0" layoutY="660.0" prefHeight="43.0" prefWidth="243.0" visible="false"
+                      style="-fx-background-color: #51d035; /* Light Red */
                 -fx-border-color: #ebccd1; /* Dark Red */
                 -fx-border-width: 1px;
                 -fx-border-radius: 5px;

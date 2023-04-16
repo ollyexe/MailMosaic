@@ -1,5 +1,6 @@
-package it.edu.unito.client.alerts;
+package it.edu.unito.client.model;
 
+import it.edu.unito.eclientlib.AlertText;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.text.Text;

@@ -1,15 +1,14 @@
 package it.edu.unito.client.Controllers;
 
-import it.edu.unito.client.Client;
-import it.edu.unito.client.alerts.AlertManager;
-import it.edu.unito.client.alerts.AlertText;
+import it.edu.unito.client.model.Client;
+import it.edu.unito.client.model.AlertManager;
+import it.edu.unito.eclientlib.AlertText;
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.shape.LineTo;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
@@ -55,8 +54,6 @@ public class ForwardController {
 
     Mail selectedMail ;
 
-    public TextFlow getSuccessAlert() { return successAlert; }
-
     public TextFlow getDangerAlert() { return dangerAlert; }
 
 
@@ -67,23 +64,6 @@ public class ForwardController {
     public void initialize(){
 
 
-    }
-
-
-    public TextField getSenderTextField() {
-        return senderTextField;
-    }
-
-    public TextField getRecipientsTextField() {
-        return recipientsTextField;
-    }
-
-    public TextField getObjectTextField() {
-        return objectTextField;
-    }
-
-    public TextArea getMessageEditor() {
-        return messageEditor;
     }
 
 
@@ -100,7 +80,7 @@ public class ForwardController {
 
 
     @FXML
-    private void onSendButtonClick() throws InterruptedException {
+    private void onSendButtonClick()  {
         String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
         if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
             Mail email = new Mail(senderTextField.getText(),
@@ -130,12 +110,5 @@ public class ForwardController {
     }
 
 
-    private void send(Object email){
-//        model.addEmails(Collections.singletonList((Email) email));
-//        //clearing all fields
-//        recipientsTextField.clear();
-//        objectTextField.clear();
-//        messageEditor.setText("");
-//        AlertManager.showSuccessSendMessage(AlertText.MESSAGE_SENT, 2);
-    }
+
 }
