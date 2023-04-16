@@ -1,8 +1,8 @@
 package it.edu.unito.client.Controllers;
 
-import it.edu.unito.client.Client;
-import it.edu.unito.client.alerts.AlertManager;
-import it.edu.unito.client.alerts.AlertText;
+import it.edu.unito.client.model.Client;
+import it.edu.unito.client.model.AlertManager;
+import it.edu.unito.eclientlib.AlertText;
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
 import javafx.fxml.FXML;
@@ -24,8 +24,7 @@ public class ComposeController {
     public Button sendBtn;
     @FXML
     private TextFlow dangerAlert;
-    @FXML
-    private TextFlow successAlert;
+
     @FXML
     private TextField senderTextField;
     @FXML
@@ -36,8 +35,6 @@ public class ComposeController {
     private TextArea messageEditor;
 
 
-    public TextFlow getSuccessAlert() { return successAlert; }
-
     public TextFlow getDangerAlert() { return dangerAlert; }
 
 
@@ -46,23 +43,6 @@ public class ComposeController {
         senderTextField.setEditable(false);
         senderTextField.setText(Client.prop.getProperty("client.usr"));
 
-    }
-
-
-    public TextField getSenderTextField() {
-        return senderTextField;
-    }
-
-    public TextField getRecipientsTextField() {
-        return recipientsTextField;
-    }
-
-    public TextField getObjectTextField() {
-        return objectTextField;
-    }
-
-    public TextArea getMessageEditor() {
-        return messageEditor;
     }
 
 
@@ -79,12 +59,13 @@ public class ComposeController {
 
 
     @FXML
-    private void onSendButtonClick() throws InterruptedException {
-        String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
+    private void onSendButtonClick()  {
+        String[] recipientsArray = recipientsTextField.getText().split(",");
         if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
             Mail email = new Mail(senderTextField.getText(),
                     new ArrayList<>(List.of(recipientsArray)),
                     objectTextField.getText(), messageEditor.getText());
+
 
 
             if (Client.getInstance().send(email)){

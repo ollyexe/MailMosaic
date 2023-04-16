@@ -53,6 +53,14 @@
     -fx-padding: 10px;
     -fx-border-radius: 50%;
 }
+.reply-all-button {
+    -fx-background-color: #197e5a;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-border-radius: 50%;
+}
 .forward-button {
     -fx-background-color: #03da26;
     -fx-text-fill: white;

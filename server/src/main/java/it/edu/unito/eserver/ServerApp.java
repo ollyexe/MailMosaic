@@ -9,15 +9,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerApp extends Application {
 
-    private static ExecutorService appFX;
-        public static Unifier unifier;
-        public static Server server;
+    public static Unifier unifier;
+    public static Server server;
 
     public static void main(String[] args)  {
 
@@ -25,7 +23,7 @@ public class ServerApp extends Application {
             unifier = new Unifier();
             server = new Server();
 
-            appFX = Executors.newFixedThreadPool(Integer.parseInt(server.proprieties.getProperty("server.threads_count")));
+            ExecutorService appFX = Executors.newSingleThreadExecutor();
             appFX.execute(Application::launch);
             ((Thread) server).start();
 
@@ -49,9 +47,9 @@ public class ServerApp extends Application {
 
 
     @Override
-    public void stop() throws Exception {
+    public void stop()  {
         System.out.println("Server stoped at : "+LocalDateTime.now().format(Util.formatter));
-       System.exit(0);
+        System.exit(0);
     }
 
 }

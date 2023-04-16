@@ -1,10 +1,11 @@
 package it.edu.unito.eserver.model.Operations;
 
-import it.edu.unito.eserver.model.Operations.Factory.OperationFactory;
+import it.edu.unito.eclientlib.Request;
+import it.edu.unito.eclientlib.Response;
 import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.LogManager;
-import it.edu.unito.eclientlib.*;
+import it.edu.unito.eserver.model.Operations.Factory.OperationFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -43,6 +44,14 @@ public class Ops  implements Runnable{
             outputStream.flush();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+        }
+        finally {
+            try {
+                socket.close();
+                System.out.println("Close");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

@@ -22,29 +22,29 @@ public class Server extends Thread{
 
     private final LogManager logManager;
 
-    private ServerSocket serverSocket;
-    private final ExecutorService serverThreads;
+    private final ExecutorService pool;
     public Server(){
         logManager= ServerApp.unifier.getLogManager();
         logManager.printNewLog(new Log("Loading initial config app.properties...", LogType.SYS));
         proprieties = loadProp();
-        serverThreads  = Executors.newFixedThreadPool(Integer.parseInt(proprieties.getProperty("server.threads_count")));
+        pool  = Executors.newFixedThreadPool(Integer.parseInt(proprieties.getProperty("server.threads_count")));
     }
 
     @Override
     public void start(){
-        Socket currentSocket = null;
         try {
-            serverSocket = new ServerSocket(Integer.parseInt(proprieties.getProperty("server.server_port")));
+            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(proprieties.getProperty("server.server_port")));
             logManager.printNewLog(new Log("Start server at : "+ InetAddress.getLocalHost().getHostAddress()+":" + proprieties.getProperty("server.server_port"),LogType.SYS));
 
             while (!Thread.interrupted()){
-                currentSocket = serverSocket.accept();
+                Socket currentSocket = serverSocket.accept();
                 currentSocket.setSoTimeout(Integer.parseInt(proprieties.getProperty("server.timeout")));
-                serverThreads.execute(new Ops(currentSocket));
+                pool.execute(new Ops(currentSocket));
             }
-        } catch (Exception ignored) {
+            serverSocket.close();
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ReplyController {
+public class ReplyAllController {
 
     @FXML
     public Button cancelBtn;
@@ -27,6 +27,7 @@ public class ReplyController {
     private TextFlow dangerAlert;
     @FXML
     private TextFlow successAlert;
+
     @FXML
     private TextField senderTextField;
     @FXML
@@ -40,9 +41,16 @@ public class ReplyController {
 
     public void setSelectedMail(Mail selectedMail) {
         this.selectedMail = selectedMail;
-        recipientsTextField.setText((selectedMail.getSender()).replace("[","").replace("]",""));
+        if (selectedMail.getReceivers().size()==1){
+            recipientsTextField.setText(selectedMail.getReceivers().toString().replace("[","").replace("]",""));
+
+        }
+        else {
+            recipientsTextField.setText(((selectedMail.getReceivers().stream().filter(s -> !s.equals(Client.prop.getProperty("client.usr"))).toList()).toString()).replace("[","").replace("]",""));
+
+        }
         recipientsTextField.setEditable(false);
-        objectTextField.setText("Reply : "+selectedMail.getSubject());
+        objectTextField.setText("Reply All : "+selectedMail.getSubject());
         objectTextField.setEditable(false);
 
 
@@ -55,7 +63,7 @@ public class ReplyController {
     public TextFlow getDangerAlert() { return dangerAlert; }
 
 
-    public ReplyController() {
+    public ReplyAllController() {
     }
 
     @FXML
@@ -107,7 +115,6 @@ public class ReplyController {
         }
 
     }
-
 
 
 }

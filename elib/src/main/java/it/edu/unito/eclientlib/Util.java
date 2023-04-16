@@ -4,7 +4,6 @@ package it.edu.unito.eclientlib;
 import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class Util {
@@ -22,6 +21,6 @@ public class Util {
                 Arrays.stream(dirs).toList().contains(receiver);
     }
     public static boolean validateEmail(String email){
-        return Pattern.matches("^(.+?)@gmail.com", email);
+        return Pattern.matches("^(.+?)@gmail.com", email)&&checkUser(email);
     }
 }

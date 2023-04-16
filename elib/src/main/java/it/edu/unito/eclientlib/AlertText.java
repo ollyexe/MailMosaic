@@ -1,4 +1,4 @@
-package it.edu.unito.client.alerts;
+package it.edu.unito.eclientlib;
 
 public enum AlertText {
     INVALID_RECIPIENTS("Invalid recipients address, some of them may not exists."),

@@ -1,6 +1,6 @@
 package it.edu.unito.client.Controllers;
 
-import it.edu.unito.client.Client;
+import it.edu.unito.client.model.Client;
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
 import javafx.application.Platform;
@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,8 +26,6 @@ import java.util.concurrent.Executors;
 
 public class MainController {
 
-    @FXML
-    private SplitPane splitPane;
     @FXML
     public TextArea emailContentTxt;
     @FXML
@@ -47,17 +44,17 @@ public class MainController {
     @FXML
     public  TextFlow dangerAlert;
 
-
-    public void setMailListView(ListView<Mail> mailListView) {
-        this.mailListView = mailListView;
+    public TextFlow getNewMailAlert() {
+        return newMailAlert;
     }
+
+    @FXML
+    public  TextFlow newMailAlert;
+
 
     @FXML
     public ListView<Mail> mailListView;
 
-    private ObservableList<Mail> inboxContent;
-
-    private ListProperty<Mail> inboxProp;
     public static Mail selectedMail;
     Mail emptyMail;
     private  ExecutorService appFX;
@@ -69,9 +66,9 @@ public class MainController {
 
         emptyMail = Mail.generateEmptyEmail();
         selectedMail = emptyMail;
-        inboxContent= FXCollections.observableList(Collections.
+        ObservableList<Mail> inboxContent = FXCollections.observableList(Collections.
                 synchronizedList(new ArrayList<>()));
-        inboxProp=new SimpleListProperty<>();
+        ListProperty<Mail> inboxProp = new SimpleListProperty<>();
         inboxProp.set(inboxContent);
         //binding tra lstEmails e inboxProperty
         mailListView.itemsProperty().bind(inboxProp);
@@ -84,18 +81,13 @@ public class MainController {
         return mailListView;
     }
 
-    public ObservableList<Mail> getInbox() {
-        return inboxContent;
-    }
-
-
 
     @FXML
     private void handleClickListView(MouseEvent event) {
         if (event.getClickCount() == 1) { // Double-click detection
-            Object selectedItem = mailListView.getSelectionModel().getSelectedItem();
+            Mail selectedItem = mailListView.getSelectionModel().getSelectedItem();
 
-            updateSelectedMailView((Mail) selectedItem);
+            updateSelectedMailView(selectedItem);
             // Perform your desired action with the selected item
         }
     }
@@ -112,14 +104,15 @@ public class MainController {
                 else{
                     if (mail!=null){
 
-                        setText(mail.toString());
+
                         if (!mail.isRead()){
-                            setStyle("-fx-font-weight: bold;");
-                        }
+                            setText("NEW!!!  "+ mail);
+                        }else setText(mail.toString());
 
 
                         setOnMouseClicked(mouseEvent -> {
                             setStyle(null);
+                            setText(mail.toString());
                             selectedMail = mailList.getSelectionModel().getSelectedItem();
                             updateSelectedMailView(selectedMail);
 
@@ -146,6 +139,7 @@ public class MainController {
             emailContentTxt.setWrapText(true);
             if (!(mail.isRead())){
                 Client.getInstance().read(mail);
+
             }
 
 
@@ -162,22 +156,20 @@ public class MainController {
 
 
     @FXML
-    public void onComposeButtonClick(MouseEvent mouseEvent) throws IOException {
-        appFX.execute(() -> {
-            Platform.runLater(() -> {
-                Parent root;
-                try {
-                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("compose.fxml")));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Stage stage = new Stage();
-                stage.setTitle("Write a new mail");
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            });
-        });
+    public void onComposeButtonClick()  {
+        appFX.execute(() -> Platform.runLater(() -> {
+            Parent root;
+            try {
+                root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("compose.fxml")));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Stage stage = new Stage();
+            stage.setTitle("Write a new mail");
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }));
 
     }
 
@@ -185,59 +177,76 @@ public class MainController {
 
 
     @FXML
-    public void ondeleteButtonClick(MouseEvent mouseEvent) {
+    public void ondeleteButtonClick() {
         Client.getInstance().delete(selectedMail);
         selectedMail = emptyMail;
         updateSelectedMailView(selectedMail);
     }
 
 
-    public void onReplyButtonClick(MouseEvent mouseEvent) {
-        appFX.execute(() -> {
-            Platform.runLater(() -> {
-                Parent root ;
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("reply.fxml"));
-                    root = loader.load();
-                    ReplyController reply = loader.getController();
-                    Platform.runLater(() -> reply.setSelectedMail(selectedMail));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+    public void onReplyButtonClick() {
+        appFX.execute(() -> Platform.runLater(() -> {
+            Parent root ;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("reply.fxml"));
+                root = loader.load();
+                ReplyController reply = loader.getController();
+                Platform.runLater(() -> reply.setSelectedMail(selectedMail));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
 
-                Stage stage = new Stage();
-                stage.setTitle("Reply to selected mail");
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            });
-        });
+            Stage stage = new Stage();
+            stage.setTitle("Reply to selected mail");
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }));
 
     }
 
 
 
-    public void onForwardButtonClick(MouseEvent mouseEvent) {
-        appFX.execute(() -> {
-            Platform.runLater(() -> {
-                Parent root ;
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("forward.fxml"));
-                    root = loader.load();
-                    ForwardController reply = loader.getController();
-                    Platform.runLater(() -> reply.setSelectedMail(selectedMail));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+    public void onForwardButtonClick() {
+        appFX.execute(() -> Platform.runLater(() -> {
+            Parent root ;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("forward.fxml"));
+                root = loader.load();
+                ForwardController reply = loader.getController();
+                Platform.runLater(() -> reply.setSelectedMail(selectedMail));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
 
-                Stage stage = new Stage();
-                stage.setTitle("Forward selected mail");
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            });
-        });
+            Stage stage = new Stage();
+            stage.setTitle("Forward selected mail");
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }));
+    }
+
+    public void onReplyAllButtonClick() {
+        appFX.execute(() -> Platform.runLater(() -> {
+            Parent root ;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("replyAll.fxml"));
+                root = loader.load();
+                ReplyAllController reply = loader.getController();
+                Platform.runLater(() -> reply.setSelectedMail(selectedMail));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            Stage stage = new Stage();
+            stage.setTitle("Reply all to selected mail");
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }));
     }
 }
