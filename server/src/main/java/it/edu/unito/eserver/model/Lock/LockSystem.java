@@ -1,19 +1,16 @@
 package it.edu.unito.eserver.model.Lock;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
-/**
- Classe che gestisce l acesso concorrente al db e alle varie operazioni,creando un ReentrantReadWriteLock per ogni utente.
- L utente connetendosi si va a creare un lock, quando si disconnette il lock viene eliminato.
- */
+
 public class LockSystem {
 
-    private final ConcurrentHashMap<String, ReentrantReadWriteLock> locks;
+    private final HashMap<String, ReentrantLock> locks;
 
     private static LockSystem instance = new LockSystem();
     private LockSystem(){
-        locks = new ConcurrentHashMap<>();
+        locks = new HashMap<>();
     }
 
     public static LockSystem getInstance(){
@@ -26,12 +23,12 @@ public class LockSystem {
     }
 
     public void addLockEntry(String user){
-        locks.putIfAbsent(user, new ReentrantReadWriteLock());
+        locks.putIfAbsent(user, new ReentrantLock(true));
     }
     public void removeLockEntry(String user){
         locks.remove(user);
     }
-    public ReentrantReadWriteLock getLock(String user){
+    public ReentrantLock getLock(String user){
         return locks.get(user);
     }
 

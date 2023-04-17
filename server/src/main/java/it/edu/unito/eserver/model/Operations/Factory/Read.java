@@ -1,15 +1,15 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
+import it.edu.unito.eclientlib.*;
 import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.Log;
 import it.edu.unito.eserver.model.Log.LogManager;
 import it.edu.unito.eserver.model.Log.LogType;
-import it.edu.unito.eclientlib.*;
 import javafx.application.Platform;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
 
@@ -29,11 +29,7 @@ public class Read implements Operation{
     public Response handle() {
         Mail mail=req.getContent();
         ResponseName name;
-        ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(req.getSender()).writeLock();
-
-
-        ReentrantReadWriteLock.WriteLock writeLock =
-                lockSys.getLock(req.getSender()).writeLock();
+        ReentrantLock lock = lockSys.getLock(req.getSender());
 
         if (mail == null){
             name = ResponseName.ILLEGAL_PARAMS;
@@ -43,16 +39,12 @@ public class Read implements Operation{
                             .append(ResponseName.ILLEGAL_PARAMS)).toString(), LogType.WARNING) ));
         }
         else {
-            writeLock.lock();
-
-
-
+            lock.lock();
             name = (ServerApp.unifier.getDao()
                     .read(mail, req.getSender())) ?
                     ResponseName.SUCCESS :
                     ResponseName.OP_ERROR;
-
-            writeLock.unlock();
+            lock.unlock();
             logResponse(name, req);
         }
 

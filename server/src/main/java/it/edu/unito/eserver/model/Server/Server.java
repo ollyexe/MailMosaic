@@ -37,10 +37,13 @@ public class Server extends Thread{
             logManager.printNewLog(new Log("Start server at : "+ InetAddress.getLocalHost().getHostAddress()+":" + proprieties.getProperty("server.server_port"),LogType.SYS));
 
             while (!Thread.interrupted()){
+                //apro la connseeione
                 Socket currentSocket = serverSocket.accept();
                 currentSocket.setSoTimeout(Integer.parseInt(proprieties.getProperty("server.timeout")));
+                //currentSocket passato per valore
                 pool.execute(new Ops(currentSocket));
             }
+            //chiude tutte le connessioni
             serverSocket.close();
 
         } catch (Exception e) {

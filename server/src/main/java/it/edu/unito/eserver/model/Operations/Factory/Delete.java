@@ -1,16 +1,16 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
+import it.edu.unito.eclientlib.*;
 import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.Log;
 import it.edu.unito.eserver.model.Log.LogManager;
 import it.edu.unito.eserver.model.Log.LogType;
-import it.edu.unito.eclientlib.*;
 import javafx.application.Platform;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
 
@@ -29,8 +29,7 @@ public class Delete implements Operation{
     public Response handle()  {
         Mail email = req.getContent();
         ResponseName name;
-        ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(req.getSender()).writeLock();
-
+        ReentrantLock lock = lockSys.getLock(req.getSender());
         if (email == null){
             name = ResponseName.ILLEGAL_PARAMS;
             Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(

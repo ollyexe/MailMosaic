@@ -82,15 +82,9 @@ public class Client {
 
             return (Response) inputStream.readObject();
         } catch (ClassNotFoundException | IOException e) {
-<<<<<<< HEAD
+
             AlertManager.showTemporizedAlert(mainController.dangerAlert, AlertText.NO_CONNECTION, 2);
             throw new RuntimeException("Connessione persa");
-=======
-
-
-            AlertManager.showTemporizedAlert(mainController.dangerAlert, AlertText.NO_CONNECTION, 2);
-            throw new RuntimeException();
->>>>>>> origin/main
 
         }
 

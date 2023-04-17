@@ -1,16 +1,15 @@
 package it.edu.unito.eserver.model.DAO;
 
 
-import it.edu.unito.eclientlib.*;
+import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
-import it.edu.unito.eserver.model.Log.LogManager;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Dao {
     private final String memory = new File("").getAbsolutePath() +"/server/src/main/java/it/edu/unito/eserver/memory";
@@ -58,7 +57,7 @@ public class Dao {
 
 
         try {
-            for (File file : emailsFiles) {
+            for (File file : Objects.requireNonNull(emailsFiles)) {
                 fin = new FileInputStream(file);
                 obj = new ObjectInputStream(fin);
                 emails.add((Mail) obj.readObject());
@@ -107,22 +106,23 @@ public class Dao {
     }
 
     public boolean delete(Mail mail, String user) throws IOException {
-
+        boolean isDeleted;
         Optional<File> file= Optional.of(new File(findEmailPath(mail, user)));
 
-        if (file.isEmpty()) {
+        if (!file.get().exists()) {
             return false;
         } else {
             LockSystem lockSys;
             lockSys = ServerApp.unifier.getLockSystem();
-            ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(user).writeLock();
+            ReentrantLock lock = lockSys.getLock(user);
 
             lock.lock();
-            boolean b = Files.deleteIfExists(Path.of(file.get().getAbsolutePath()));
+            Files.deleteIfExists(Path.of(file.get().getAbsolutePath()));
+            isDeleted=!(new File(findEmailPath(mail, user)).exists());
             lock.unlock();
         }
 
-        return !(new File(findEmailPath(mail, user)).exists());
+        return isDeleted;
 
     }
 

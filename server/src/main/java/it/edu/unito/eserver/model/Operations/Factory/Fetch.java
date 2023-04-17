@@ -1,12 +1,15 @@
 package it.edu.unito.eserver.model.Operations.Factory;
 
+import it.edu.unito.eclientlib.Mail;
+import it.edu.unito.eclientlib.Request;
+import it.edu.unito.eclientlib.Response;
+import it.edu.unito.eclientlib.ResponseName;
 import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
 import it.edu.unito.eserver.model.Log.LogManager;
-import it.edu.unito.eclientlib.*;
+
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import static it.edu.unito.eserver.model.Log.LogManager.logResponse;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class Fetch implements Operation{
@@ -25,13 +28,13 @@ public class Fetch implements Operation{
     public Response handle() {
         List<Mail> mails;
         ResponseName name;
-        ReentrantReadWriteLock.WriteLock lock = lockSys.getLock(req.getSender()).writeLock();
+        ReentrantLock lock = lockSys.getLock(req.getSender());
 
         lock.lock();
         mails = ServerApp.unifier.getDao().fetch(req.getSender()).stream().toList();
 
         lock.unlock();
-        name = (mails.size()>=0) ?
+        name = (mails!=null) ?
                 ResponseName.SUCCESS :
                 ResponseName.OP_ERROR;
 

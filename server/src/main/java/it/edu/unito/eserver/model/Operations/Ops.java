@@ -35,20 +35,19 @@ public class Ops  implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
             Request rq = (Request) inputStream.readObject();
             lockSys.addLockEntry(rq.getSender());
-            Response response = new OperationFactory(rq).produce().handle();//factory da implementare
+            Response response = new OperationFactory(rq).produce().handle();
             lockSys.removeLockEntry(rq.getSender());
-           // System.out.println("Received Value : "+ a);
-            outputStream.flush();
+
+
             outputStream.writeObject(response);
-//            Platform.runLater(()->logManager.printNewLog(new Log(response.getResponseName().toString(),response.getResponseName().equals(ResponseName.SUCCESS)?LogType.INFO:LogType.WARNING)));
             outputStream.flush();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         finally {
             try {
+                //chiudo la connesione
                 socket.close();
-                System.out.println("Close");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

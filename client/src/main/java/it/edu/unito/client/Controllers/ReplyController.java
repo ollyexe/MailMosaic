@@ -26,8 +26,6 @@ public class ReplyController {
     @FXML
     private TextFlow dangerAlert;
     @FXML
-    private TextFlow successAlert;
-    @FXML
     private TextField senderTextField;
     @FXML
     private TextField recipientsTextField;
@@ -80,7 +78,7 @@ public class ReplyController {
 
     @FXML
     private void onSendButtonClick()  {
-        String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
+        String[] recipientsArray = recipientsTextField.getText().split(",");
         if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
             Mail email = new Mail(senderTextField.getText(),
                     new ArrayList<>(List.of(recipientsArray)),
@@ -92,7 +90,6 @@ public class ReplyController {
                 recipientsTextField.clear();
                 objectTextField.clear();
                 messageEditor.setText("");
-                AlertManager.showTemporizedAlert(successAlert, AlertText.MESSAGE_SENT, 2);
                 Stage stage=(Stage) MainController.scene.getWindow();
                 stage.close();
 
