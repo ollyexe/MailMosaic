@@ -8,7 +8,7 @@ public class LockSystem {
 
     private final HashMap<String, ReentrantLock> locks;
 
-    private static LockSystem instance = new LockSystem();
+    private static LockSystem instance = null;
     private LockSystem(){
         locks = new HashMap<>();
     }

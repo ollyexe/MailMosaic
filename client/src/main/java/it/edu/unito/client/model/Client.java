@@ -14,19 +14,36 @@ public class Client {
     private static Client instance=null;
     public static Properties prop;
 
+    String usr;
     public String getUsr() {
         return usr;
     }
+     public int threadNumber;
+     public int fetchIntervall;
 
-    String usr;
+    public int getThreadNumber() {
+        return threadNumber;
+    }
+
+    public int getFetchIntervall() {
+        return fetchIntervall;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public int port;
+
+
+
     private Client(){
-         prop = loadProp();
-
-        if (Util.checkUser(prop.getProperty("client.usr"))){
+            prop = loadProp();
+            port = Integer.parseInt(prop.getProperty("client.server_port"));
+            fetchIntervall= Integer.parseInt(prop.getProperty("client.fetch_interval"));
+            threadNumber = Integer.parseInt(prop.getProperty("client.threads_count"));
             usr = prop.getProperty("client.usr");
-        } else {
-            throw new IllegalArgumentException();
-        }
+
 
 
 
@@ -72,9 +89,9 @@ public class Client {
     public Response processRequest(Request request) {
         ObjectOutputStream outputStream ;
         ObjectInputStream inputStream ;
-        // create a new Socket object and connect to the server on port 1234
+        // create a new Socket object and connect to the server on port x
 
-        try (Socket socket = new Socket("127.0.0.1", Integer.parseInt(prop.getProperty("client.server_port")))){
+        try (Socket socket = new Socket("127.0.0.1", port)){
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream  = new ObjectInputStream(socket.getInputStream());
             outputStream.writeObject(request);

@@ -38,7 +38,7 @@ public class ForwardController {
 
     public void setSelectedMail(Mail selectedMail) {
         this.selectedMail = selectedMail;
-        senderTextField.setText(Client.prop.getProperty("client.usr"));
+        senderTextField.setText(Client.getInstance().getUsr());
         senderTextField.setEditable(false);
         objectTextField.setText("Forward : "+selectedMail.getSubject());
         objectTextField.setEditable(false);
@@ -79,7 +79,7 @@ public class ForwardController {
 
     @FXML
     private void onSendButtonClick()  {
-        String[] recipientsArray = recipientsTextField.getText().split(",");
+        String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
         if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
             Mail email = new Mail(senderTextField.getText(),
                     new ArrayList<>(List.of(recipientsArray)),

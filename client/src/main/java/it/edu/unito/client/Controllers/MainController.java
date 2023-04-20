@@ -1,5 +1,6 @@
 package it.edu.unito.client.Controllers;
 
+import it.edu.unito.client.ClientApp;
 import it.edu.unito.client.model.Client;
 import it.edu.unito.eclientlib.Mail;
 import it.edu.unito.eclientlib.Util;
@@ -62,7 +63,7 @@ public class MainController {
 
     @FXML
     public void initialize(){
-        appFX= Executors.newFixedThreadPool(Integer.parseInt(Client.prop.getProperty("client.threads_count")));
+        appFX= Executors.newFixedThreadPool(Client.getInstance().getThreadNumber());
 
         emptyMail = Mail.generateEmptyEmail();
         selectedMail = emptyMail;
@@ -181,6 +182,7 @@ public class MainController {
         Client.getInstance().delete(selectedMail);
         selectedMail = emptyMail;
         updateSelectedMailView(selectedMail);
+        ClientApp.extract();
     }
 
 

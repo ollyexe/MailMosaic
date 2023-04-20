@@ -5,33 +5,32 @@ import it.edu.unito.eclientlib.Request;
 import it.edu.unito.eclientlib.Response;
 import it.edu.unito.eclientlib.ResponseName;
 import it.edu.unito.eserver.ServerApp;
+import it.edu.unito.eserver.model.DAO.Dao;
 import it.edu.unito.eserver.model.Lock.LockSystem;
-import it.edu.unito.eserver.model.Log.LogManager;
+import it.edu.unito.eserver.model.Log.Loger;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
 public class Fetch implements Operation{
 
     Request req;
-    LogManager logManager;
-    LockSystem lockSys;
+
 
     public Fetch(Request req) {
         this.req = req;
-        logManager = ServerApp.unifier.getLogManager();
-        lockSys = ServerApp.unifier.getLockSystem();
     }
 
     @Override
     public Response handle() {
         List<Mail> mails;
         ResponseName name;
-        ReentrantLock lock = lockSys.getLock(req.getSender());
+        ReentrantLock lock = LockSystem.getInstance().getLock(req.getSender());
 
         lock.lock();
-        mails = ServerApp.unifier.getDao().fetch(req.getSender()).stream().toList();
+        mails = Dao.getInstance().fetch(req.getSender()).stream().toList();
 
         lock.unlock();
         name = (mails!=null) ?
@@ -42,4 +41,6 @@ public class Fetch implements Operation{
         return new Response(name, mails);
 
     }
+
+
 }

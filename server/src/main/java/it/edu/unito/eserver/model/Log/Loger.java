@@ -15,12 +15,12 @@ import java.util.LinkedList;
 
 //LogManager con pattern singleton
 
-public class LogManager {
+public class Loger {
     private final ListProperty<Log> log;
     private final ObservableList<Log> logContent;
 
-    private static LogManager instance = new LogManager();
-    private LogManager (){
+    private static Loger instance = null;
+    private Loger(){
         this.logContent = FXCollections.observableList(Collections.
                 synchronizedList(new LinkedList<>()));
         this.log = new SimpleListProperty<>();
@@ -32,9 +32,9 @@ public class LogManager {
         return log;
     }
 
-    public static LogManager getInstance(){
+    public static Loger getInstance(){
         if (instance == null) {
-            instance = new LogManager() ;
+            instance = new Loger() ;
 
         }
 
@@ -47,19 +47,20 @@ public class LogManager {
 
 
     public static void logResponse(ResponseName name, Request req) {
+        Loger loger = Loger.getInstance();
         if (name.equals(ResponseName.SUCCESS)){
-            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+            Platform.runLater(()-> loger.printNewLog(new Log(
                     (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
                             .append("[INFO] :")
                             .append(req.toString())).toString(), LogType.INFO) ));
 
         } else if (name.equals(ResponseName.ILLEGAL_PARAMS)) {
-            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+            Platform.runLater(()-> loger.printNewLog(new Log(
                     (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
                             .append("[Warning] :")
                             .append(ResponseName.ILLEGAL_PARAMS).append("||").append(req.toString()).append("||").append(name)).toString(), LogType.WARNING) ));
         } else {
-            Platform.runLater(()-> ServerApp.unifier.getLogManager().printNewLog(new Log(
+            Platform.runLater(()-> loger.printNewLog(new Log(
                     (new StringBuilder().append(LocalDateTime.now().format(Util.formatter))
                             .append("[Warning] :")
                             .append("||").append(req.toString()).append("||").append(name)).toString(), LogType.WARNING) ));

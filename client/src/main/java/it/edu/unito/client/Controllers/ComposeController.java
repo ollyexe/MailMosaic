@@ -41,7 +41,7 @@ public class ComposeController {
     @FXML
     public void initialize(){
         senderTextField.setEditable(false);
-        senderTextField.setText(Client.prop.getProperty("client.usr"));
+        senderTextField.setText(Client.getInstance().getUsr());
 
     }
 
@@ -67,18 +67,13 @@ public class ComposeController {
                     objectTextField.getText(), messageEditor.getText());
 
 
-
-            if (Client.getInstance().send(email)){
+            Client.getInstance().send(email);
                 //clearing all fields
                 recipientsTextField.clear();
                 objectTextField.clear();
                 messageEditor.setText("");
                 Stage stage=(Stage) MainController.scene.getWindow();
                 stage.close();
-
-            }else {
-                AlertManager.showTemporizedAlert(dangerAlert, AlertText.OP_ERROR, 2);
-            }
 
 
         } else {

@@ -59,7 +59,7 @@ public class ReplyController {
     @FXML
     public void initialize(){
         senderTextField.setEditable(false);
-        senderTextField.setText(Client.prop.getProperty("client.usr"));
+        senderTextField.setText(Client.getInstance().getUsr());
 
     }
 
@@ -78,7 +78,7 @@ public class ReplyController {
 
     @FXML
     private void onSendButtonClick()  {
-        String[] recipientsArray = recipientsTextField.getText().split(",");
+        String[] recipientsArray = recipientsTextField.getText().split("\\s*,\\s*");
         if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
             Mail email = new Mail(senderTextField.getText(),
                     new ArrayList<>(List.of(recipientsArray)),

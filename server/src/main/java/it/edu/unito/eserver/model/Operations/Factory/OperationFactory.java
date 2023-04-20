@@ -26,6 +26,7 @@ public class OperationFactory {
 
                 return new Delete(rq);
             }
+
             default -> throw new IllegalArgumentException("Invalid product type: " + rq.getOpName());
 
         }

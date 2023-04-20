@@ -2,7 +2,6 @@ package it.edu.unito.eserver;
 
 import it.edu.unito.eclientlib.Util;
 import it.edu.unito.eserver.model.Server.Server;
-import it.edu.unito.eserver.model.Server.Unifier;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,14 +13,14 @@ import java.util.concurrent.Executors;
 
 public class ServerApp extends Application {
 
-    public static Unifier unifier;
+
     public static Server server;
 
     public static void main(String[] args)  {
 
         try {
-            unifier = new Unifier();
-            server = new Server();
+
+            server = Server.getIntance();
 
             ExecutorService appFX = Executors.newSingleThreadExecutor();
             appFX.execute(Application::launch);

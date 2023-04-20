@@ -1,7 +1,7 @@
 package it.edu.unito.eserver.controller;
 
 import it.edu.unito.eserver.model.Log.Log;
-import it.edu.unito.eserver.model.Log.LogManager;
+import it.edu.unito.eserver.model.Log.Loger;
 import it.edu.unito.eserver.model.Log.LogType;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,7 +21,7 @@ public class Controller {
     }
 
     public void initialize() {
-        LogManager lm = LogManager.getInstance();
+        Loger lm = Loger.getInstance();
          logList.itemsProperty().bind(lm.logProperty());
 
          logList.setCellFactory(cell ->new ListCell<>(){

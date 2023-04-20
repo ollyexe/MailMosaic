@@ -4,7 +4,7 @@ import it.edu.unito.eclientlib.Request;
 import it.edu.unito.eclientlib.Response;
 import it.edu.unito.eserver.ServerApp;
 import it.edu.unito.eserver.model.Lock.LockSystem;
-import it.edu.unito.eserver.model.Log.LogManager;
+import it.edu.unito.eserver.model.Log.Loger;
 import it.edu.unito.eserver.model.Operations.Factory.OperationFactory;
 
 import java.io.IOException;
@@ -14,16 +14,13 @@ import java.net.Socket;
 
 public class Ops  implements Runnable{
     Socket socket;
-    LogManager logManager;
-    LockSystem lockSys;
 
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
     public Ops(Socket socket) {
         this.socket = socket;
-        logManager = ServerApp.unifier.getLogManager();
-        lockSys = ServerApp.unifier.getLockSystem();
+
 
     }
 
@@ -34,9 +31,9 @@ public class Ops  implements Runnable{
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
             Request rq = (Request) inputStream.readObject();
-            lockSys.addLockEntry(rq.getSender());
+            LockSystem.getInstance().addLockEntry(rq.getSender());
             Response response = new OperationFactory(rq).produce().handle();
-            lockSys.removeLockEntry(rq.getSender());
+            LockSystem.getInstance().removeLockEntry(rq.getSender());
 
 
             outputStream.writeObject(response);

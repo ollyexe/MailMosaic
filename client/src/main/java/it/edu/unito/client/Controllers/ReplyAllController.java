@@ -39,13 +39,16 @@ public class ReplyAllController {
 
 
     public void setSelectedMail(Mail selectedMail) {
+
         this.selectedMail = selectedMail;
+        senderTextField.setText(Client.getInstance().getUsr());
+        senderTextField.setEditable(false);
         if (selectedMail.getReceivers().size()==1){
             recipientsTextField.setText(selectedMail.getReceivers().toString().replace("[","").replace("]",""));
 
         }
         else {
-            recipientsTextField.setText(((selectedMail.getReceivers().stream().filter(s -> !s.equals(Client.prop.getProperty("client.usr"))).toList()).toString()).replace("[","").replace("]",""));
+            recipientsTextField.setText(((selectedMail.getReceivers().stream().filter(s -> !s.equals(Client.getInstance().getUsr()))).toList()).toString().replace("[","").replace("]","")+" , "+selectedMail.getSender());
 
         }
         recipientsTextField.setEditable(false);
@@ -67,8 +70,7 @@ public class ReplyAllController {
 
     @FXML
     public void initialize(){
-        senderTextField.setEditable(false);
-        senderTextField.setText(Client.prop.getProperty("client.usr"));
+
 
     }
 
@@ -87,7 +89,7 @@ public class ReplyAllController {
 
     @FXML
     private void onSendButtonClick()  {
-        String[] recipientsArray = recipientsTextField.getText().split(",");
+        String[] recipientsArray = recipientsTextField.getText().split("\\s* , \\s*");
         if (Arrays.stream(recipientsArray).allMatch(Util::validateEmail)){
             Mail email = new Mail(senderTextField.getText(),
                     new ArrayList<>(List.of(recipientsArray)),

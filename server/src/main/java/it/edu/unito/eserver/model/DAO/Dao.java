@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Dao {
     private final String memory = new File("").getAbsolutePath() +"/server/src/main/java/it/edu/unito/eserver/memory";
-    private static  Dao instance = new Dao();
+    private static  Dao instance = null;
     private Dao() {
     }
 
@@ -113,7 +113,7 @@ public class Dao {
             return false;
         } else {
             LockSystem lockSys;
-            lockSys = ServerApp.unifier.getLockSystem();
+            lockSys = LockSystem.getInstance();
             ReentrantLock lock = lockSys.getLock(user);
 
             lock.lock();
