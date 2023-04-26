@@ -2,26 +2,24 @@ package it.edu.unito.eclientlib;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
 public class Mail implements Serializable,Comparable<Mail>{
     private final int id;
     private final String sender;
-    private final List<String> receivers;
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setReceivers(List<String> receivers) {
+        this.receivers = receivers;
     }
 
-    private  String subject;
+    private  List<String> receivers;
+
+    private final String subject;
     private final String text;
-    private LocalDateTime date;
+    private final LocalDateTime date;
     private boolean read;
 
-
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     public Mail(String sender, List<String> receivers, String subject, String text) {
         this.id=this.idGen(sender, receivers, subject, text, LocalDateTime.now());
