@@ -31,18 +31,18 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        String op= null;
+        String op;
         switch (opName){
             case PUT -> {
                 op="Read";
                 return  op +"||"+
-                        " from='" + sender + '\'' +
+                        " from='" + content.getSender() + '\'' +
                         ", to=" + content.getReceivers()+"|| initiator "+sender ;
             }
             case POST -> {
                 op="Send";
                 return  op +"||"+
-                        " from='" + sender + '\'' +
+                        " from='" + content.getSender() + '\'' +
                         ", to=" + content.getReceivers()+"|| initiator "+sender ;
             }
             case GET -> {

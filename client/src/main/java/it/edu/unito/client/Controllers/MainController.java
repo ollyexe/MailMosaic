@@ -13,13 +13,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -83,15 +87,7 @@ public class MainController {
     }
 
 
-    @FXML
-    private void handleClickListView(MouseEvent event) {
-        if (event.getClickCount() == 1) { // Double-click detection
-            Mail selectedItem = mailListView.getSelectionModel().getSelectedItem();
 
-            updateSelectedMailView(selectedItem);
-            // Perform your desired action with the selected item
-        }
-    }
 
 
 

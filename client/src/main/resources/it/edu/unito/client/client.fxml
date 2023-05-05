@@ -27,7 +27,7 @@
 
       <StackPane >
         <Pane >
-          <ListView fx:id="mailListView" onMouseClicked="#handleClickListView" />
+          <ListView fx:id="mailListView"  />
 
           <Button fx:id="composeBtn" onMouseClicked="#onComposeButtonClick" text="Scrivi" styleClass="new-button"  layoutX="85.0" layoutY="500.0" mnemonicParsing="false"/>
         </Pane>
